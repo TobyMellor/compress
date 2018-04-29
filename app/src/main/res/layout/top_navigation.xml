@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.TabLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tab_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:elevation="4dp"
+    app:tabSelectedTextColor="@color/colorWhite"
+    app:tabTextColor="@color/colorCloudyWhite">
+
+    <android.support.design.widget.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/read_later" />
+
+    <android.support.design.widget.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/discover" />
+
+    <android.support.design.widget.TabItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings" />
+
+</android.support.design.widget.TabLayout>

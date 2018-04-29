@@ -6,6 +6,6 @@ import android.view.ViewGroup;
 
 public class DiscoverCardView extends ComPressCardView {
     public DiscoverCardView(Context context, ViewGroup container, @NonNull Article article) {
-        super(context, container, article, R.layout.card);
+        super(context, container, article, R.layout.card_discover);
     }
 }

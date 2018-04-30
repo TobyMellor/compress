@@ -1,24 +1,18 @@
 package uk.co.tobymellor.compress;
 
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-public class DiscoverActivity extends AppCompatActivity {
+public class DiscoverFragment {
+    View fragment;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discover);
+    public DiscoverFragment(LayoutInflater inflater, ViewGroup container) {
+        fragment = inflater.inflate(R.layout.fragment_discover, container, false);
+    }
 
+    public View getView() {
         final Article[] articles = {
                 new Article("Title test", "Author summary :)", "Company nice", "Author name"),
                 new Article("Title test", "Author summary :)", "Company nice", "Author name"),
@@ -26,10 +20,12 @@ public class DiscoverActivity extends AppCompatActivity {
                 new Article("Title test", "Author summary :)", "Company nice", "Author name")
         };
 
-        ListView list = findViewById(R.id.list_cards);
+        ListView list = fragment.findViewById(R.id.list_cards);
 
         list.setAdapter(
-                new ArticleAdapter(this, articles, list)
+                new ArticleAdapter(fragment.getContext(), articles, list)
         );
+
+        return fragment;
     }
 }

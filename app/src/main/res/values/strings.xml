@@ -3,7 +3,6 @@
     <string name="app_name">ComPress</string>
     <string name="discover">Discover</string>
     <string name="settings">Settings</string>
-    <string name="read_more">Read More</string>
 
     <!--Common Elements-->
     <string name="read_later">Read Later</string>
@@ -15,4 +14,9 @@
     <string name="clear_cached_articles">Clear cached articles</string>
     <string name="view_user_guide">View user guide</string>
     <string name="enable_notifications">Enable notifications</string>
+
+    <!--Articles-->
+    <string name="read_three_sentence_summary">Read More</string>
+    <string name="read_seven_sentence_summary">Read Even More</string>
+    <string name="read_full_article">Read Full Article</string>
 </resources>

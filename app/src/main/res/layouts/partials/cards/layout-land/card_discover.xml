@@ -44,7 +44,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
-                    android:alpha=".87"
                     android:includeFontPadding="false"
                     android:textColor="@color/colorBlack"
                     android:textSize="17sp"
@@ -61,8 +60,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="4dp"
-                    android:alpha=".54"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorGrey"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/image_post"
                     app:layout_constraintTop_toBottomOf="@+id/text_title" />

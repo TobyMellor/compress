@@ -66,14 +66,35 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cardView.setOnTouchListener(new View.OnTouchListener() {
+                private int MAX_CLICK_MOVEMENT = 150;
+                private int startX;
+                private int startY;
+
                 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN && fullArticle.getVisibility() == View.INVISIBLE) {
-                        performCircularReveal(context, (int) event.getRawX(), (int) event.getRawY());
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            startX = (int) event.getRawX();
+                            startY = (int) event.getRawY();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            int endX = (int) event.getRawX();
+                            int endY = (int) event.getRawY();
+
+                            if (hasClicked(endX, endY) && fullArticle.getVisibility() == View.INVISIBLE) {
+                                performCircularReveal(context, endX, endY);
+                            }
                     }
 
                     return false;
+                }
+
+                private boolean hasClicked(int endX, int endY) {
+                    int deltaX = Math.abs(startX - endX);
+                    int deltaY = Math.abs(startY - endY);
+
+                    return deltaX <= MAX_CLICK_MOVEMENT && deltaY <= MAX_CLICK_MOVEMENT;
                 }
             });
         } else {
@@ -95,7 +116,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
                 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN && fullArticle.getVisibility() == View.VISIBLE) {
+                    if (event.getAction() == MotionEvent.ACTION_UP && fullArticle.getVisibility() == View.VISIBLE) {
                         performCircularHide(context, (int) event.getRawX(), (int) event.getRawY());
                     }
 
@@ -106,7 +127,9 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             floatingCloseButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    fullArticle.setVisibility(View.INVISIBLE);
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        fullArticle.setVisibility(View.INVISIBLE);
+                    }
 
                     return false;
                 }

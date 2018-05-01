@@ -49,20 +49,26 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup container) {
         if (convertView == null) {
-            convertView = new DiscoverCardView(getContext(), container, articles[position]).getView();
+            Article article = articles[position];
 
-            final CardView cardView = convertView.findViewById(R.id.card_view);
-            final Context context = getContext();
+            convertView = new DiscoverCardView(getContext(), container, article).getView();
 
-            initShowArticleListener(context, cardView);
+            initShowArticleListener(getContext(), (CardView) convertView.findViewById(R.id.card_view), article);
         }
 
         return convertView;
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initShowArticleListener(final Context context, final CardView cardView) {
+    private void initShowArticleListener(final Context context, final CardView cardView, final Article article) {
         final ConstraintLayout fullArticle = ((Activity) context).findViewById(R.id.constraint_full_article);
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populateFullArticle(fullArticle, article);
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cardView.setOnTouchListener(new View.OnTouchListener() {
@@ -187,5 +193,17 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         int height = Math.max(displayMetrics.heightPixels - cy, cy);
 
         return (float) Math.hypot(width, height);
+    }
+
+    private void populateFullArticle(ConstraintLayout fullArticle, Article article) {
+        System.out.println(article.getTitle());
+        TextView textTitle = fullArticle.findViewById(R.id.text_title);
+        TextView textAuthorDetails = fullArticle.findViewById(R.id.text_author_details);
+        TextView textSummary = fullArticle.findViewById(R.id.text_summary);
+
+        textTitle.setText(article.getTitle());
+        textAuthorDetails.setText(String.format("%s from %s", article.getAuthorName(), article.getAuthorCompany()));
+        textSummary.setText("Soon...");
+
     }
 }

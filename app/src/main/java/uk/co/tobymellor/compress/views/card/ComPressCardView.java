@@ -1,23 +1,14 @@
-package uk.co.tobymellor.compress;
+package uk.co.tobymellor.compress.views.card;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v7.widget.CardView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import uk.co.tobymellor.compress.R;
+import uk.co.tobymellor.compress.models.articles.Article;
 
 @SuppressWarnings("FieldCanBeLocal")
 
@@ -44,8 +35,8 @@ public abstract class ComPressCardView {
         title.setText(article.getTitle());
         authorSummary.setText(article.getAuthorSummary());
 
-        authorCompany.setText(article.getAuthorCompany());
-        authorName.setText(article.getAuthorName());
+        authorCompany.setText(article.getAuthor().getName());
+        authorName.setText(article.getAuthor().getName());
     }
 
     public View getView() {

@@ -1,9 +1,9 @@
-package uk.co.tobymellor.compress;
+package uk.co.tobymellor.compress.views;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import uk.co.tobymellor.compress.R;
 
 public class SettingsFragment {
     View fragment;

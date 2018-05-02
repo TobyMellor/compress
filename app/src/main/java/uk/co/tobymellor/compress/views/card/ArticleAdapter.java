@@ -1,8 +1,7 @@
-package uk.co.tobymellor.compress;
+package uk.co.tobymellor.compress.views.card;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -11,9 +10,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewPager;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
@@ -21,16 +18,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import uk.co.tobymellor.compress.R;
+import uk.co.tobymellor.compress.models.articles.Article;
 
 public class ArticleAdapter extends ArrayAdapter<Article> {
     private final Article[] articles;
-    private final ViewGroup container;
     private final ConstraintLayout fullArticle;
     private final FloatingActionButton floatingCloseButton;
 
@@ -43,7 +38,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         initHideArticleListener(context);
 
         this.articles = articles;
-        this.container = container;
     }
 
     @Override
@@ -196,13 +190,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     }
 
     private void populateFullArticle(ConstraintLayout fullArticle, Article article) {
-        System.out.println(article.getTitle());
         TextView textTitle = fullArticle.findViewById(R.id.text_title);
         TextView textAuthorDetails = fullArticle.findViewById(R.id.text_author_details);
         TextView textSummary = fullArticle.findViewById(R.id.text_summary);
 
         textTitle.setText(article.getTitle());
-        textAuthorDetails.setText(String.format("%s from %s", article.getAuthorName(), article.getAuthorCompany()));
+        textAuthorDetails.setText(String.format("%s from %s", article.getAuthor().getName(), article.getAuthor().getName()));
         textSummary.setText("Soon...");
 
     }

@@ -1,20 +1,24 @@
-package uk.co.tobymellor.compress;
+package uk.co.tobymellor.compress.views;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class ReadLaterFragment {
+import uk.co.tobymellor.compress.R;
+import uk.co.tobymellor.compress.models.articles.Article;
+import uk.co.tobymellor.compress.views.card.ArticleAdapter;
+
+public class DiscoverFragment {
     View fragment;
 
-    public ReadLaterFragment(LayoutInflater inflater, ViewGroup container) {
-        fragment = inflater.inflate(R.layout.fragment_read_later, container, false);
+    public DiscoverFragment(LayoutInflater inflater, ViewGroup container) {
+        fragment = inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
     public View getView() {
         final Article[] articles = {
-                new Article("Read later title", "Summary of the read later article here", "BBC News", "John Smith")
+                //
         };
 
         ListView list = fragment.findViewById(R.id.list_cards);

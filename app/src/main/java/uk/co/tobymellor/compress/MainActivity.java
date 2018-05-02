@@ -7,14 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
+
+import uk.co.tobymellor.compress.views.DiscoverFragment;
+import uk.co.tobymellor.compress.views.ReadLaterFragment;
+import uk.co.tobymellor.compress.views.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
 

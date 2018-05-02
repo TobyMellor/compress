@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateArticleTable extends Migration
+class CreateNewsOutletGenreTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,8 @@ class CreateArticleTable extends Migration
      */
     public function up()
     {
-        Schema::create('article', function (Blueprint $table) {
+        Schema::create('news_outlet_genre', function (Blueprint $table) {
             $table->increments('id');
-
-            $table->string('title');
-            $table->string('author_summary');
-            $table->string('three_sentence_summary');
-            $table->string('seven_sentence_summary');
-            $table->string('article_link');
 
             $table->integer('genre_id')
                   ->unsigned();
@@ -28,19 +22,12 @@ class CreateArticleTable extends Migration
                   ->references('id')
                   ->on('genre');
 
-            $table->integer('author_id')
-                  ->unsigned();
-            $table->foreign('author_id')
-                  ->references('id')
-                  ->on('author');
-
             $table->integer('news_outlet_id')
                   ->unsigned();
             $table->foreign('news_outlet_id')
                   ->references('id')
                   ->on('news_outlet');
 
-            $table->timestamp('date');
             $table->timestamps();
         });
     }
@@ -52,6 +39,6 @@ class CreateArticleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('article');
+        Schema::dropIfExists('news_outlet');
     }
 }

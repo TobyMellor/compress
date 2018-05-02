@@ -14,6 +14,7 @@ class NewsOutlet extends Model
      * @var array
      */
     protected $fillable = [
+        'slug',
         'name'
     ];
 

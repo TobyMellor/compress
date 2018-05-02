@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAuthorTable extends Migration
+class CreateCheckCacheTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,15 @@ class CreateAuthorTable extends Migration
      */
     public function up()
     {
-        Schema::create('author', function (Blueprint $table) {
+        Schema::create('check_cache', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('name');
-            
+            $table->integer('news_outlet_genre_id')
+                  ->unsigned();
+            $table->foreign('news_outlet_genre_id')
+                  ->references('id')
+                  ->on('news_outlet_genre');
+
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ class CreateAuthorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('author');
+        Schema::dropIfExists('check_cache');
     }
 }

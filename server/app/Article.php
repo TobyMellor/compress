@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Article extends Model
 {
     protected $table = 'article';
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -19,17 +19,16 @@ class Article extends Model
         'three_sentence_summary',
         'seven_sentence_summary',
         'article_link',
-        'genre_id',
         'author_id',
-        'news_outlet_id',
+        'news_outlet_genre_id',
         'date'
     ];
 
     /**
-     * Get the Genre this article is in
+     * Get the news outlet/genre this record is referencing
      */
-    public function genre() {
-        return $this->belongsTo(Genre::class, 'genre_id', 'id');
+    public function news_outlet_genre() {
+        return $this->belongsTo(NewsOutletGenre::class, 'news_outlet_genre_id', 'id');
     }
 
     /**
@@ -37,12 +36,5 @@ class Article extends Model
      */
     public function author() {
         return $this->belongsTo(Author::class, 'author_id', 'id');
-    }
-
-    /**
-     * Get the News Outlet this article is from
-     */
-    public function news_outlet() {
-        return $this->belongsTo(NewsOutlet::class, 'news_outlet_id', 'id');
     }
 }

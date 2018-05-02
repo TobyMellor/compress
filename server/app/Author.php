@@ -16,11 +16,4 @@ class Author extends Model
     protected $fillable = [
         'name'
     ];
-
-    /**
-     * Get the articles written by this author
-     */
-    public function article() {
-        return $this->hasMany(Article::class, 'author_id', 'id');
-    }
 }

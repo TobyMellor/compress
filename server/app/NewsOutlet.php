@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class NewsOutlet extends Model
 {
+    protected $table = 'news_outlet';
+
     /**
      * The attributes that are mass assignable.
      *

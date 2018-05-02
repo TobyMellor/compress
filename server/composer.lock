@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad8af3a630c5aaf41cb4c34e85f43c43",
+    "content-hash": "785216a230f3cea87d9873eb60e5636a",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -2233,6 +2233,54 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "albertcht/lumen-testing",
+            "version": "v0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/albertcht/lumen-testing.git",
+                "reference": "979acebba46ae602bae82660645e3c57214ffe7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/albertcht/lumen-testing/zipball/979acebba46ae602bae82660645e3c57214ffe7d",
+                "reference": "979acebba46ae602bae82660645e3c57214ffe7d",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/lumen-framework": "5.3.*|5.4.*|5.5.*|5.6.*",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AlbertCht\\Lumen\\Testing\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Albert Chen",
+                    "email": "albert.cht@gmail.com"
+                }
+            ],
+            "description": "Testing Suite For Lumen like Laravel does.",
+            "keywords": [
+                "laravel",
+                "lumen",
+                "phpunit",
+                "test",
+                "testing"
+            ],
+            "time": "2018-02-28T08:15:39+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.1.0",

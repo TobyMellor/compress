@@ -23,7 +23,8 @@ class CreateArticleTable extends Migration
             $table->string('article_link');
 
             $table->integer('author_id')
-                  ->unsigned();
+                  ->unsigned()
+                  ->nullable();
             $table->foreign('author_id')
                   ->references('id')
                   ->on('author');

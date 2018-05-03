@@ -16,10 +16,9 @@ class CreateCheckCacheTable extends Migration
         Schema::create('check_cache', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('news_outlet_id')
-                  ->unsigned();
-            $table->foreign('news_outlet_id')
-                  ->references('id')
+            $table->string('news_outlet_slug');
+            $table->foreign('news_outlet_slug')
+                  ->references('slug')
                   ->on('news_outlet');
 
             $table->timestamps();

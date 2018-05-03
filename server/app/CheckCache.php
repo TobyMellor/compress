@@ -14,10 +14,10 @@ class CheckCache extends Model
      * @var array
      */
     protected $fillable = [
-        'news_outlet_id'
+        'news_outlet_slug'
     ];
 
     public function news_outlet() {
-        return $this->belongsTo(NewsOutlet::class, 'news_outlet_id', 'id');
+        return $this->belongsTo(NewsOutlet::class, 'news_outlet_slug', 'slug');
     }
 }

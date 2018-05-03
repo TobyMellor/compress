@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Carbon\Carbon;
+
 class Article extends Model
 {
     protected $table = 'article';
@@ -24,6 +26,8 @@ class Article extends Model
         'date'
     ];
 
+    protected $appends = ['human_date']; // attribute, referencing getHumanDateAttribute()
+
     /**
      * Get the news outlet/genre this record is referencing
      */
@@ -36,5 +40,9 @@ class Article extends Model
      */
     public function author() {
         return $this->belongsTo(Author::class, 'author_id', 'id');
+    }
+
+    public function getHumanDateAttribute() {
+        return Carbon::parse($this->attributes['date'])->diffForHumans();
     }
 }

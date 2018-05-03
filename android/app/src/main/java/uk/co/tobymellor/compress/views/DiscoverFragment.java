@@ -5,8 +5,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import org.json.JSONException;
+
+import java.lang.reflect.Array;
+import java.util.HashSet;
+import java.util.concurrent.ExecutionException;
+
+import uk.co.tobymellor.compress.JSONTask;
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
+import uk.co.tobymellor.compress.models.articles.ArticleManager;
 import uk.co.tobymellor.compress.views.card.ArticleAdapter;
 
 public class DiscoverFragment {
@@ -17,9 +25,16 @@ public class DiscoverFragment {
     }
 
     public View getView() {
-        final Article[] articles = {
-                //
-        };
+        Article[] articles = {};
+
+        try {
+            ArticleManager articleManager = new ArticleManager();
+            HashSet<Article> articleSet = articleManager.getArticles();
+
+            articles = articleSet.toArray(new Article[articleSet.size()]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ListView list = fragment.findViewById(R.id.list_cards);
 

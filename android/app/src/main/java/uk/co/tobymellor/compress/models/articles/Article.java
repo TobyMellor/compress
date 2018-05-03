@@ -2,11 +2,12 @@ package uk.co.tobymellor.compress.models.articles;
 
 import java.util.Date;
 
+import uk.co.tobymellor.compress.models.Model;
 import uk.co.tobymellor.compress.models.authors.Author;
 import uk.co.tobymellor.compress.models.genres.Genre;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
-public class Article {
+public class Article extends Model {
     private final String title;
     private final String authorSummary;
     private final String threeSentenceSummary;
@@ -17,25 +18,17 @@ public class Article {
     private final Genre genre;
     private final Author author;
 
-    public Article(
-            String title,
-            String authorSummary,
-            String threeSentenceSummary,
-            String sevenSentenceSummary,
-            String articleLink,
-            Date date,
-            String humanDate,
-            Genre genre,
-            Author author) {
-        this.title = title;
-        this.authorSummary = authorSummary;
-        this.threeSentenceSummary = threeSentenceSummary;
-        this.sevenSentenceSummary = sevenSentenceSummary;
-        this.date = date;
-        this.humanDate = humanDate;
-        this.articleLink = articleLink;
-        this.genre = genre;
-        this.author = author;
+    public Article(ArticleInput articleInput) {
+        this.genre  = null;
+        this.author = null;
+        this.date   = getDateFromMySQLFormat(articleInput.getDate());
+
+        this.title                = articleInput.getTitle();
+        this.authorSummary        = articleInput.getAuthorSummary();
+        this.threeSentenceSummary = articleInput.getThreeSentenceSummary();
+        this.sevenSentenceSummary = articleInput.getSevenSentenceSummary();
+        this.humanDate            = articleInput.getHumanDate();
+        this.articleLink          = articleInput.getArticleLink();
     }
 
     public String getTitle() {

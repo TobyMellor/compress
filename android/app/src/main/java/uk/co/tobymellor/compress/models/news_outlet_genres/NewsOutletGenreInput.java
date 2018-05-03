@@ -1,6 +1,6 @@
-package uk.co.tobymellor.compress.models.articles;
+package uk.co.tobymellor.compress.models.news_outlet_genres;
 
-public interface ArticleInput {
+public interface NewsOutletGenreInput {
     String getTitle();
 
     String getAuthorSummary();

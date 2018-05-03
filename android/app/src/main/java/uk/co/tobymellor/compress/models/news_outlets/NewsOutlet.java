@@ -1,22 +1,19 @@
 package uk.co.tobymellor.compress.models.news_outlets;
 
-import java.util.HashSet;
-
-import uk.co.tobymellor.compress.models.authors.Author;
-
 public class NewsOutlet {
     private final String name;
-    private HashSet<Author> authors;
+    private final String slug;
 
-    public NewsOutlet(String name) {
+    public NewsOutlet(String name, String slug) {
         this.name = name;
+        this.slug = slug;
     }
 
     public String getName() {
         return name;
     }
 
-    public void addAuthor(Author author) {
-        authors.add(author);
+    public String getSlug() {
+        return slug;
     }
 }

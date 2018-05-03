@@ -11,11 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONException;
+
+import java.util.concurrent.ExecutionException;
+
+import uk.co.tobymellor.compress.models.articles.ArticleManager;
 import uk.co.tobymellor.compress.views.DiscoverFragment;
 import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private static ArticleManager articleManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -37,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            articleManager = new ArticleManager();
+        } catch (InterruptedException | ExecutionException | JSONException e) {
+            e.printStackTrace();
+        }
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -49,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+    }
+
+    public static ArticleManager getArticleManager() {
+        return articleManager;
     }
 
     /**

@@ -1,17 +1,20 @@
 package uk.co.tobymellor.compress.models;
 
-import android.util.Pair;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 abstract public class Manager {
     private final static String BASE_URL = "http://46.101.28.103/api";
 
+
     public abstract void add(Object object);
 
     public abstract void remove(Object object);
+
+    public abstract String getEndpoint();
 
     protected String formUrl(String endpoint, HashMap<String, String> params) {
         StringBuilder paramString = new StringBuilder();
@@ -27,5 +30,23 @@ abstract public class Manager {
         }
 
         return String.format("%s/%s%s", Manager.BASE_URL, endpoint, paramString.toString().replace(" ", "+"));
+    }
+
+    protected void populateFromJSON(Manager manager, Class<? extends Model> ModelType, Class<? extends JSONInput> JSONInputType, String json) throws Exception {
+        JSONObject jsonObject = new JSONObject(json); // TODO: Deal with this asynchronously instead of calling .get
+
+        JSONArray jsonElements = jsonObject.getJSONArray(manager.getEndpoint());
+
+        for (int i = 0; i < jsonElements.length(); i++) {
+            JSONObject jsonElement = jsonElements.getJSONObject(i);
+
+            Object object = ModelType.getDeclaredConstructor().newInstance(JSONInputType.getDeclaredConstructor().newInstance(jsonElement));
+
+            manager.add(object);
+        }
+    }
+
+    protected void populateFromXML(Manager manager, Class<?> XMLInput, String json) {
+        //
     }
 }

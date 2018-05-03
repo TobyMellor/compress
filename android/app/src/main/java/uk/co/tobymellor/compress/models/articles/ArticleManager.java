@@ -18,6 +18,7 @@ import uk.co.tobymellor.compress.models.Manager;
 
 public class ArticleManager extends Manager {
     private HashSet<Article> articles = new HashSet<>();
+
     private final static String ENDPOINT = "article";
     private final static String ENDPOINT_PLURAL = "articles";
 
@@ -26,8 +27,6 @@ public class ArticleManager extends Manager {
 
         params.put("date", "2018-04-02 00:00:00");     // TODO: Replace with cached date
         params.put("news_outlet_genre_ids", "1,2,14"); // TODO: Replace with current news_outlet_genre_ids
-
-        System.out.println(super.formUrl(ArticleManager.ENDPOINT, params));
 
         AsyncTask<String, String, String> task = new JSONTask().execute(super.formUrl(ArticleManager.ENDPOINT, params));
 
@@ -60,5 +59,10 @@ public class ArticleManager extends Manager {
         if (article instanceof Article) {
             articles.remove(article);
         }
+    }
+
+    @Override
+    public String getEndpoint() {
+        return ENDPOINT;
     }
 }

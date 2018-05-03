@@ -1,11 +1,11 @@
-package uk.co.tobymellor.compress.models.articles;
+package uk.co.tobymellor.compress.models.news_outlet_genres;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import uk.co.tobymellor.compress.models.JSONInput;
 
-class JSONArticleInput extends JSONInput implements ArticleInput {
+class JSONNewsOutletGenreInput extends JSONInput implements NewsOutletGenreInput {
     private final String title;
     private final String authorSummary;
     private final String threeSentenceSummary;
@@ -16,7 +16,7 @@ class JSONArticleInput extends JSONInput implements ArticleInput {
     private final String newsOutletGenreId;
     private final String authorId;
 
-    JSONArticleInput(JSONObject json) throws JSONException {
+    public JSONNewsOutletGenreInput(JSONObject json) throws JSONException {
         title                = json.getString("title");
         authorSummary        = json.getString("author_summary");
         threeSentenceSummary = json.getString("three_sentence_summary");

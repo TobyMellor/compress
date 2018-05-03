@@ -5,6 +5,7 @@ import java.util.Date;
 import uk.co.tobymellor.compress.models.Model;
 import uk.co.tobymellor.compress.models.authors.Author;
 import uk.co.tobymellor.compress.models.genres.Genre;
+import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenre;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public class Article extends Model {
@@ -15,11 +16,11 @@ public class Article extends Model {
     private final String articleLink;
     private final Date date;
     private final String humanDate;
-    private final Genre genre;
+    private final NewsOutletGenre newsOutletGenre;
     private final Author author;
 
-    public Article(ArticleInput articleInput) {
-        this.genre  = null;
+    Article(ArticleInput articleInput) {
+        this.newsOutletGenre  = null;
         this.author = null;
         this.date   = getDateFromMySQLFormat(articleInput.getDate());
 
@@ -57,8 +58,8 @@ public class Article extends Model {
 
     public String getHumanDate() { return humanDate; }
 
-    public Genre getGenre() {
-        return genre;
+    public NewsOutletGenre getGenre() {
+        return newsOutletGenre;
     }
 
     public Author getAuthor() {

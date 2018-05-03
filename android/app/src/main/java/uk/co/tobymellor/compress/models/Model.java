@@ -10,6 +10,14 @@ abstract public class Model {
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Model.MYSQL_DATE_FORMAT, Locale.UK);
 
+    public Model(Class<? extends JSONInput> JSONInput) {
+        //
+    }
+
+    public Model() {
+        //
+    }
+
     public Date getDateFromMySQLFormat(String dateString) {
         Date date = null;
 

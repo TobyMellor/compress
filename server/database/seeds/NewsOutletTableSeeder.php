@@ -15,16 +15,20 @@ class NewsOutletTableSeeder extends Seeder
     {
         $newsOutlets = [
             [
-                'slug' => 'bbc-news',
-                'name' => 'BBC News'
+                'slug'       => 'bbc-news',
+                'name'       => 'BBC News',
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
+            ],
+            [
+                'id'         => 'mashable',
+                'name'       => 'Mashable',
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
             ]/*,
             [
                 'id'   => 'fortune',
                 'name' => 'Fortune'
-            ],
-            [
-                'id'   => 'mashable',
-                'name' => 'Mashable'
             ],
             [
                 'id'   => 'polygon',

@@ -16,11 +16,11 @@ class CreateCheckCacheTable extends Migration
         Schema::create('check_cache', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('news_outlet_genre_id')
+            $table->integer('news_outlet_id')
                   ->unsigned();
-            $table->foreign('news_outlet_genre_id')
+            $table->foreign('news_outlet_id')
                   ->references('id')
-                  ->on('news_outlet_genre');
+                  ->on('news_outlet');
 
             $table->timestamps();
         });

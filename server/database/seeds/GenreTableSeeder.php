@@ -18,18 +18,40 @@ class GenreTableSeeder extends Seeder
     public function run()
     {
         $newsOutlets = [
-            'bbc-news' => ['uk', 'world', 'business', 'politics', 'tech', 'science', 'health', 'family-and-education', 'entertainment-and-arts', 'stories']
+            'bbc-news' => [
+                ['slug' => 'uk',                     'name' => 'UK'],
+                ['slug' => 'world',                  'name' => 'World'],
+                ['slug' => 'business',               'name' => 'Business'],
+                ['slug' => 'politics',               'name' => 'Politics'],
+                ['slug' => 'tech',                   'name' => 'Tech'],
+                ['slug' => 'science',                'name' => 'Science'],
+                ['slug' => 'health',                 'name' => 'Health'],
+                ['slug' => 'family-and-education',   'name' => 'Family & Education'],
+                ['slug' => 'entertainment-and-arts', 'name' => 'Entertainment & Arts'],
+                ['slug' => 'stories',                'name' => 'Stories']
+            ],
+            'mashable' => [
+                ['slug' => 'video',                  'name' => 'Video'],
+                ['slug' => 'entertainment',          'name' => 'Entertainment'],
+                ['slug' => 'culture',                'name' => 'Culture'],
+                ['slug' => 'tech',                   'name' => 'Tech'],
+                ['slug' => 'science',                'name' => 'Science'],
+                ['slug' => 'business',               'name' => 'Business'],
+                ['slug' => 'social-good',            'name' => 'Social Good']
+            ]
         ];
 
         foreach ($newsOutlets as $newsOutlet => $genres) {
             $newsOutlet = NewsOutlet::where('slug', $newsOutlet)->first();
 
             foreach ($genres as $genre) {
-                $genre = Genre::updateOrCreate(['slug' => $genre], ['slug' => $genre]);
+                $genre = Genre::updateOrCreate(['slug' => $genre['slug']], $genre);
 
                 NewsOutletGenre::insert([
-                    'news_outlet_id' => $newsOutlet->id;
-                    'genre_id'       => $genre->id
+                    'news_outlet_id' => $newsOutlet->id,
+                    'genre_id'       => $genre->id,
+                    'created_at'     => new DateTime(),
+                    'updated_at'     => new DateTime()
                 ]);
             }
         }

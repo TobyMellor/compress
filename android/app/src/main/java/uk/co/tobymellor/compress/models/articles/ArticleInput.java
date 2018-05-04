@@ -17,5 +17,5 @@ public interface ArticleInput {
 
     String getNewsOutletGenreId();
 
-    String getAuthorId();
+    String getAuthorName();
 }

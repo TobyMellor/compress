@@ -13,13 +13,16 @@ use App\CheckCache;
 use App\NewsOutlet;
 use App\NewsOutletGenre;
 
+use App\Http\Controllers\ArticleCrawler;
+
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 
 date_default_timezone_set('Europe/London');
 
-class ArticleController extends Controller
-{
+class ArticleController extends Controller {
+    const NEWS_API_ENDPOINT = 'https://newsapi.org/v2/everything';
+
     public function index(Request $request) {
         $this->validate($request, [
             'date'                  => 'nullable|date',
@@ -124,7 +127,7 @@ class ArticleController extends Controller
         }
 
         try {
-            $response = json_decode($client->request('GET', 'https://newsapi.org/v2/everything', [
+            $response = json_decode($client->request('GET', self::NEWS_API_ENDPOINT, [
                 'query' => $queryParams
             ])->getBody()->getContents());
 
@@ -154,18 +157,7 @@ class ArticleController extends Controller
                     )->id;
                 }
 
-                $article = new Article([
-                    'title'                  => $article->title,
-                    'author_summary'         => $article->description,
-                    'three_sentence_summary' => 'Coming soon...',
-                    'seven_sentence_summary' => 'Coming soon...',
-                    'article_link'           => $article->url,
-                    'author_id'              => $author,
-                    'news_outlet_genre_id'   => 1, // TODO: Retrieve this from crawling the $article->url
-                    'date'                   => $article->publishedAt
-                ]);
-
-                $article->save();
+                $articleCrawler = new ArticleCrawler($article->url, $article->source->id);
             }
 
             // Indicate to future requests that we have now cached this news outlet

@@ -10,32 +10,26 @@ import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
 import uk.co.tobymellor.compress.models.Manager;
-import uk.co.tobymellor.compress.models.genres.Genre;
-import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
+import uk.co.tobymellor.compress.models.articles.Article;
 
 public class NewsOutletGenreManager extends Manager {
+    private final static String ENDPOINT = "news_outlet_genres";
+
     private HashSet<NewsOutletGenre> newsOutletGenres = new HashSet<>();
-    private HashSet<NewsOutlet> newsOutlets = new HashSet<>();
-    private HashSet<Genre> genres = new HashSet<>();
 
-    private final static String ENDPOINT = "news_outlet_genre";
-
-    public NewsOutletGenreManager() throws InterruptedException, ExecutionException {
+    public NewsOutletGenreManager() throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
         HashMap<String, String> params = new HashMap<>();
 
         AsyncTask<String, String, String> task = new JSONTask().execute(super.formUrl(NewsOutletGenreManager.ENDPOINT, params));
 
-        try {
-            super.populateFromJSON(this, NewsOutletGenre.class, JSONNewsOutletGenreInput.class, task.get());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super.populateFromJSON(this, NewsOutletGenre.class, JSONNewsOutletGenreInput.class, task.get());
     }
 
     public HashSet<NewsOutletGenre> getNewsOutletGenres() {
         return newsOutletGenres;
     }
 
+    @Override
     public NewsOutletGenre get(int id) {
         for (NewsOutletGenre newsOutletGenre : newsOutletGenres) {
             if (newsOutletGenre.getId() == id) return newsOutletGenre;
@@ -45,8 +39,10 @@ public class NewsOutletGenreManager extends Manager {
     }
 
     @Override
-    public void add(Object article) {
-        //
+    public void add(Object newsOutletGenre) {
+        if (newsOutletGenre instanceof NewsOutletGenre) {
+            newsOutletGenres.add((NewsOutletGenre) newsOutletGenre);
+        }
     }
 
     @Override
@@ -56,6 +52,6 @@ public class NewsOutletGenreManager extends Manager {
 
     @Override
     public String getEndpoint() {
-        return ENDPOINT;
+        return NewsOutletGenreManager.ENDPOINT;
     }
 }

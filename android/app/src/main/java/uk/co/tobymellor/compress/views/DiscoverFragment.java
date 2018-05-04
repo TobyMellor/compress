@@ -27,6 +27,8 @@ public class DiscoverFragment {
     }
 
     public View getView() {
+        System.out.println(MainActivity.getArticleManager());
+        System.out.println(MainActivity.getArticleManager().getArticles());
         HashSet<Article> articlesHashSet = MainActivity.getArticleManager().getArticles();
 
         Article[] articles = articlesHashSet.toArray(new Article[articlesHashSet.size()]);

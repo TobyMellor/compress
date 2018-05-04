@@ -6,17 +6,9 @@ import java.util.Date;
 import java.util.Locale;
 
 abstract public class Model {
-    private final static String MYSQL_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
+    private final static String MYSQL_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Model.MYSQL_DATE_FORMAT, Locale.UK);
-
-    public Model(Class<? extends JSONInput> JSONInput) {
-        //
-    }
-
-    public Model() {
-        //
-    }
 
     public Date getDateFromMySQLFormat(String dateString) {
         Date date = null;
@@ -24,7 +16,7 @@ abstract public class Model {
         try {
             date = simpleDateFormat.parse(dateString);
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return date;

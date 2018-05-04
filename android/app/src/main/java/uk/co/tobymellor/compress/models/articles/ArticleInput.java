@@ -1,6 +1,8 @@
 package uk.co.tobymellor.compress.models.articles;
 
 public interface ArticleInput {
+    int getId();
+
     String getTitle();
 
     String getAuthorSummary();
@@ -15,7 +17,9 @@ public interface ArticleInput {
 
     String getHumanDate();
 
-    String getNewsOutletGenreId();
+    int getNewsOutletGenreId();
+
+    int getAuthorId();
 
     String getAuthorName();
 }

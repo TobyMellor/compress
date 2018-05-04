@@ -16,14 +16,18 @@ import org.json.JSONException;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.models.articles.ArticleManager;
+import uk.co.tobymellor.compress.models.genres.GenreManager;
 import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenreManager;
+import uk.co.tobymellor.compress.models.news_outlets.NewsOutletManager;
 import uk.co.tobymellor.compress.views.DiscoverFragment;
 import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private static ArticleManager articleManager;
+    private static NewsOutletManager newsOutletManager;
+    private static GenreManager genreManager;
     private static NewsOutletGenreManager newsOutletGenreManager;
+    private static ArticleManager articleManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -46,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            articleManager = new ArticleManager();
+            newsOutletManager      = new NewsOutletManager();
+            genreManager           = new GenreManager();
             newsOutletGenreManager = new NewsOutletGenreManager();
-        } catch (InterruptedException | ExecutionException | JSONException e) {
+            articleManager         = new ArticleManager();
+        } catch (InterruptedException | ExecutionException | JSONException | ReflectiveOperationException e) {
             e.printStackTrace();
         }
 
@@ -66,12 +72,20 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 
-    public static ArticleManager getArticleManager() {
-        return articleManager;
+    public static NewsOutletManager getNewsOutletManager() {
+        return newsOutletManager;
+    }
+
+    public static GenreManager getGenreManager() {
+        return genreManager;
     }
 
     public static NewsOutletGenreManager getNewsOutletGenreManager() {
         return newsOutletGenreManager;
+    }
+
+    public static ArticleManager getArticleManager() {
+        return articleManager;
     }
 
     /**

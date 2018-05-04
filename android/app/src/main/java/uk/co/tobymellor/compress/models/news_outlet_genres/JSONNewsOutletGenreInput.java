@@ -3,37 +3,29 @@ package uk.co.tobymellor.compress.models.news_outlet_genres;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import uk.co.tobymellor.compress.models.JSONInput;
-
-class JSONNewsOutletGenreInput extends JSONInput implements NewsOutletGenreInput {
-    private String id;
-    private String newsOutletId;
-    private String genreId;
+public class JSONNewsOutletGenreInput implements NewsOutletGenreInput {
+    private int id;
+    private int newsOutletId;
+    private int genreId;
 
     public JSONNewsOutletGenreInput(JSONObject json) throws JSONException {
-        title                = json.getString("title");
-        authorSummary        = json.getString("author_summary");
-        threeSentenceSummary = json.getString("three_sentence_summary");
-        sevenSentenceSummary = json.getString("seven_sentence_summary");
-        articleLink          = json.getString("article_link");
-        date                 = json.getString("date");
-        humanDate            = json.getString("human_date");
-        newsOutletGenreId    = json.getString("news_outlet_genre_id");
-        authorId             = json.getString("author_id");
+        this.id           = json.getInt("id");
+        this.newsOutletId = json.getInt("news_outlet_id");
+        this.genreId      = json.getInt("genre_id");
     }
 
     @Override
-    public String getId() {
-        return null;
+    public int getId() {
+        return id;
     }
 
     @Override
-    public String getNewsOutletId() {
-        return null;
+    public int getNewsOutletId() {
+        return newsOutletId;
     }
 
     @Override
-    public String getGenreId() {
-        return null;
+    public int getGenreId() {
+        return genreId;
     }
 }

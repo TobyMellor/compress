@@ -1,14 +1,17 @@
 package uk.co.tobymellor.compress.models;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
 abstract public class Manager {
     private final static String BASE_URL = "http://46.101.28.103/api";
 
+    public abstract Object get(int id);
 
     public abstract void add(Object object);
 
@@ -34,7 +37,12 @@ abstract public class Manager {
         return String.format("%s/%s%s", Manager.BASE_URL, endpoint, finalParamString);
     }
 
-    protected void populateFromJSON(Manager manager, Class<? extends Model> ModelType, Class<? extends JSONInput> JSONInputType, String json) throws Exception {
+    protected void populateFromJSON(
+            Manager manager,
+            Class<?> ModelType,
+            Class<?> JSONInputType,
+            String json
+    ) throws JSONException, ReflectiveOperationException {
         JSONObject jsonObject = new JSONObject(json); // TODO: Deal with this asynchronously instead of calling .get
 
         JSONArray jsonElements = jsonObject.getJSONArray(manager.getEndpoint());
@@ -42,7 +50,10 @@ abstract public class Manager {
         for (int i = 0; i < jsonElements.length(); i++) {
             JSONObject jsonElement = jsonElements.getJSONObject(i);
 
-            Object object = ModelType.getDeclaredConstructor().newInstance(JSONInputType.getDeclaredConstructor().newInstance(jsonElement));
+            Constructor<?> modelConstructor = ModelType.getConstructor(JSONInputType.getInterfaces()[0]);
+            Constructor<?> inputConstructor = JSONInputType.getConstructor(JSONObject.class);
+
+            Object object = modelConstructor.newInstance(inputConstructor.newInstance(jsonElement));
 
             manager.add(object);
         }

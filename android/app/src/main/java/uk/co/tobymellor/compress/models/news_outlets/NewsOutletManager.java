@@ -1,0 +1,54 @@
+package uk.co.tobymellor.compress.models.news_outlets;
+
+import android.os.AsyncTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.concurrent.ExecutionException;
+
+import uk.co.tobymellor.compress.JSONTask;
+import uk.co.tobymellor.compress.models.Manager;
+import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenre;
+
+public class NewsOutletManager extends Manager {
+    private final static String ENDPOINT = "news_outlets";
+
+    private HashSet<NewsOutlet> newsOutlets = new HashSet<>();
+
+    public NewsOutletManager() throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
+        HashMap<String, String> params = new HashMap<>();
+
+        AsyncTask<String, String, String> task = new JSONTask().execute(super.formUrl(NewsOutletManager.ENDPOINT, params));
+
+        super.populateFromJSON(this, NewsOutlet.class, JSONNewsOutletInput.class, task.get());
+    }
+
+    @Override
+    public NewsOutlet get(int id) {
+        for (NewsOutlet newsOutlet : newsOutlets) {
+            if (newsOutlet.getId() == id) return newsOutlet;
+        }
+
+        return null;
+    }
+
+    @Override
+    public void add(Object newsOutlet) {
+        if (newsOutlet instanceof NewsOutlet) {
+            newsOutlets.add((NewsOutlet) newsOutlet);
+        }
+    }
+
+    @Override
+    public void remove(Object newsOutlet) {
+
+    }
+
+    @Override
+    public String getEndpoint() {
+        return NewsOutletManager.ENDPOINT;
+    }
+}

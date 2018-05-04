@@ -23,10 +23,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('articles', 'ArticleController@index');
 
     $router->get('news_outlet_genres', function() {
-        return [
-            'news_outlets'       => NewsOutlet::all(),
-            'genres'             => Genre::all(),
-            'news_outlet_genres' => NewsOutletGenre::all()
-        ];
+        return NewsOutletGenre::all();
+    });
+
+    $router->get('news_outlets', function() {
+        return NewsOutlet::all();
+    });
+
+    $router->get('genres', function() {
+        return Genre::all();
     });
 });

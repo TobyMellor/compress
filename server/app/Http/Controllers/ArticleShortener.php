@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 class ArticleShortener {
-    private $fullArticleBody;
+    private $articleLink;
 
     // The attributes that will be populated by this class
     private $threeSentenceSummary;
     private $sevenSentenceSummary;
 
-    public function __construct($fullArticleBody) {
-        $this->articleLink    = $articleLink;
+    public function __construct($articleLink) {
+        $this->articleLink = $articleLink;
 
         $this->shorten();
     }
@@ -32,9 +32,9 @@ class ArticleShortener {
         $newsOutletSlug = $this->newsOutletSlug;
 
         try {
-            $response = $client->request('GET', $this->articleLink, [
+            $response = $client->request('GET', null, [
                 'query' => [
-                    
+                    //
                 ]
             ])->getBody()->getContents();
         } catch (\GuzzleHttp\Exception\ClientException $e) {

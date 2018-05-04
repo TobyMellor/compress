@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class NewsOutletGenre extends Model
 {
     protected $table = 'news_outlet_genre';
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

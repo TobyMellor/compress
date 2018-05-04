@@ -36,6 +36,14 @@ public class NewsOutletGenreManager extends Manager {
         return newsOutletGenres;
     }
 
+    public NewsOutletGenre get(int id) {
+        for (NewsOutletGenre newsOutletGenre : newsOutletGenres) {
+            if (newsOutletGenre.getId() == id) return newsOutletGenre;
+        }
+
+        return null;
+    }
+
     @Override
     public void add(Object article) {
         //

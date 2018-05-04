@@ -20,8 +20,6 @@ class CreateCheckCacheTable extends Migration
             $table->foreign('news_outlet_slug')
                   ->references('slug')
                   ->on('news_outlet');
-
-            $table->timestamps();
         });
     }
 

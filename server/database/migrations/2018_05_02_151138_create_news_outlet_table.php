@@ -19,8 +19,6 @@ class CreateNewsOutletTable extends Migration
             $table->string('slug')
                   ->unique();
             $table->string('name');
-
-            $table->timestamps();
         });
     }
 

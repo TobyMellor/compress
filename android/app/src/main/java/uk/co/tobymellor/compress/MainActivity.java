@@ -16,12 +16,14 @@ import org.json.JSONException;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.models.articles.ArticleManager;
+import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenreManager;
 import uk.co.tobymellor.compress.views.DiscoverFragment;
 import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static ArticleManager articleManager;
+    private static NewsOutletGenreManager newsOutletGenreManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             articleManager = new ArticleManager();
+            newsOutletGenreManager = new NewsOutletGenreManager();
         } catch (InterruptedException | ExecutionException | JSONException e) {
             e.printStackTrace();
         }
@@ -65,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArticleManager getArticleManager() {
         return articleManager;
+    }
+
+    public static NewsOutletGenreManager getNewsOutletGenreManager() {
+        return newsOutletGenreManager;
     }
 
     /**

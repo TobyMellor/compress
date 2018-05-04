@@ -14,7 +14,7 @@ class JSONArticleInput extends JSONInput implements ArticleInput {
     private final String date;
     private final String humanDate;
     private final String newsOutletGenreId;
-    private final String authorId;
+    private final String authorName;
 
     JSONArticleInput(JSONObject json) throws JSONException {
         title                = json.getString("title");
@@ -25,7 +25,12 @@ class JSONArticleInput extends JSONInput implements ArticleInput {
         date                 = json.getString("date");
         humanDate            = json.getString("human_date");
         newsOutletGenreId    = json.getString("news_outlet_genre_id");
-        authorId             = json.getString("author_id");
+
+        if (json.getString("author_id").equals("null")) {
+            authorName = json.getJSONObject("author").getString("name");
+        } else {
+            authorName = null;
+        }
     }
 
     @Override
@@ -69,7 +74,7 @@ class JSONArticleInput extends JSONInput implements ArticleInput {
     }
 
     @Override
-    public String getAuthorId() {
-        return authorId;
+    public String getAuthorName() {
+        return authorName;
     }
 }

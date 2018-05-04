@@ -23,8 +23,6 @@ class CreateAuthorTable extends Migration
             $table->foreign('news_outlet_id')
                   ->references('id')
                   ->on('news_outlet');
-            
-            $table->timestamps();
         });
     }
 

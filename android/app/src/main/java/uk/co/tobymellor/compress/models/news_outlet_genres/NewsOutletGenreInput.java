@@ -1,21 +1,17 @@
 package uk.co.tobymellor.compress.models.news_outlet_genres;
 
 public interface NewsOutletGenreInput {
-    String getTitle();
+    String getId();
 
-    String getAuthorSummary();
+    String getNewsOutletId();
 
-    String getThreeSentenceSummary();
+    String getNewsOutletName();
 
-    String getSevenSentenceSummary();
+    String getNewsOutletSlug();
 
-    String getArticleLink();
+    String getGenreId();
 
-    String getDate();
+    String getGenreName();
 
-    String getHumanDate();
-
-    String getNewsOutletGenreId();
-
-    String getAuthorId();
+    String getGenreSlug();
 }

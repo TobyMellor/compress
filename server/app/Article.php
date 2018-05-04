@@ -9,6 +9,7 @@ use Carbon\Carbon;
 class Article extends Model
 {
     protected $table = 'article';
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

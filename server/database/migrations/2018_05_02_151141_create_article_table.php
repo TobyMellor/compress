@@ -36,7 +36,6 @@ class CreateArticleTable extends Migration
                   ->on('news_outlet_genre');
 
             $table->timestamp('date');
-            $table->timestamps();
         });
     }
 

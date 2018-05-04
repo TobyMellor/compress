@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CheckCache extends Model
 {
     protected $table = 'check_cache';
+    public $timestamps = false;
     
     /**
      * The attributes that are mass assignable.

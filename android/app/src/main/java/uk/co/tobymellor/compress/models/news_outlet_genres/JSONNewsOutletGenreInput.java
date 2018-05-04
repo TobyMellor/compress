@@ -6,15 +6,9 @@ import org.json.JSONObject;
 import uk.co.tobymellor.compress.models.JSONInput;
 
 class JSONNewsOutletGenreInput extends JSONInput implements NewsOutletGenreInput {
-    private final String title;
-    private final String authorSummary;
-    private final String threeSentenceSummary;
-    private final String sevenSentenceSummary;
-    private final String articleLink;
-    private final String date;
-    private final String humanDate;
-    private final String newsOutletGenreId;
-    private final String authorId;
+    private String id;
+    private String newsOutletId;
+    private String genreId;
 
     public JSONNewsOutletGenreInput(JSONObject json) throws JSONException {
         title                = json.getString("title");
@@ -29,47 +23,17 @@ class JSONNewsOutletGenreInput extends JSONInput implements NewsOutletGenreInput
     }
 
     @Override
-    public String getTitle() {
-        return title;
+    public String getId() {
+        return null;
     }
 
     @Override
-    public String getAuthorSummary() {
-        return authorSummary;
+    public String getNewsOutletId() {
+        return null;
     }
 
     @Override
-    public String getThreeSentenceSummary() {
-        return threeSentenceSummary;
-    }
-
-    @Override
-    public String getSevenSentenceSummary() {
-        return sevenSentenceSummary;
-    }
-
-    @Override
-    public String getArticleLink() {
-        return articleLink;
-    }
-
-    @Override
-    public String getDate() {
-        return date;
-    }
-
-    @Override
-    public String getHumanDate() {
-        return humanDate;
-    }
-
-    @Override
-    public String getNewsOutletGenreId() {
-        return newsOutletGenreId;
-    }
-
-    @Override
-    public String getAuthorId() {
-        return authorId;
+    public String getGenreId() {
+        return null;
     }
 }

@@ -2,10 +2,12 @@ package uk.co.tobymellor.compress.models.articles;
 
 import java.util.Date;
 
+import uk.co.tobymellor.compress.MainActivity;
 import uk.co.tobymellor.compress.models.Model;
 import uk.co.tobymellor.compress.models.authors.Author;
 import uk.co.tobymellor.compress.models.genres.Genre;
 import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenre;
+import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenreManager;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public class Article extends Model {
@@ -20,8 +22,14 @@ public class Article extends Model {
     private final Author author;
 
     Article(ArticleInput articleInput) {
-        this.newsOutletGenre  = null;
-        this.author = articleInput.getAuthorName();
+        this.newsOutletGenre = MainActivity.getNewsOutletGenreManager().get(articleInput.getNewsOutletGenreId());
+
+        if (articleInput.getAuthorName() == null) {
+            this.author = new Author(articleInput.getAuthorName());
+        } else {
+            this.author = newsOutletGenre.getNewsOutlet();
+        }
+
         this.date   = getDateFromMySQLFormat(articleInput.getDate());
 
         this.title                = articleInput.getTitle();

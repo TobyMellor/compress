@@ -1,5 +1,9 @@
 <?php
 
+use App\NewsOutlet;
+use App\Genre;
+use App\NewsOutletGenre;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -16,5 +20,13 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-	$router->get('article', 'ArticleController@index');
+    $router->get('articles', 'ArticleController@index');
+
+    $router->get('news_outlet_genres', function() {
+        return [
+            'news_outlets'       => NewsOutlet::all(),
+            'genres'             => Genre::all(),
+            'news_outlet_genres' => NewsOutletGenre::all()
+        ];
+    });
 });

@@ -31,13 +31,13 @@ class GenreTableSeeder extends Seeder
                 ['slug' => 'stories',                'name' => 'Stories']
             ],
             'mashable' => [
-                ['slug' => 'video',                  'name' => 'Video'],
-                ['slug' => 'entertainment',          'name' => 'Entertainment'],
-                ['slug' => 'culture',                'name' => 'Culture'],
-                ['slug' => 'tech',                   'name' => 'Tech'],
-                ['slug' => 'science',                'name' => 'Science'],
-                ['slug' => 'business',               'name' => 'Business'],
-                ['slug' => 'social-good',            'name' => 'Social Good']
+                ['slug' => 'video',         'name' => 'Video'],
+                ['slug' => 'entertainment', 'name' => 'Entertainment'],
+                ['slug' => 'culture',       'name' => 'Culture'],
+                ['slug' => 'tech',          'name' => 'Tech'],
+                ['slug' => 'science',       'name' => 'Science'],
+                ['slug' => 'business',      'name' => 'Business'],
+                ['slug' => 'social-good',   'name' => 'Social Good']
             ]
         ];
 
@@ -49,9 +49,7 @@ class GenreTableSeeder extends Seeder
 
                 NewsOutletGenre::insert([
                     'news_outlet_id' => $newsOutlet->id,
-                    'genre_id'       => $genre->id,
-                    'created_at'     => new DateTime(),
-                    'updated_at'     => new DateTime()
+                    'genre_id'       => $genre->id
                 ]);
             }
         }

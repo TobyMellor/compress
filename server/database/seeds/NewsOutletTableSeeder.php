@@ -21,7 +21,7 @@ class NewsOutletTableSeeder extends Seeder
                 'updated_at' => new DateTime()
             ],
             [
-                'id'         => 'mashable',
+                'slug'       => 'mashable',
                 'name'       => 'Mashable',
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()

@@ -20,16 +20,16 @@ import uk.co.tobymellor.compress.models.articles.ArticleManager;
 import uk.co.tobymellor.compress.views.card.ArticleAdapter;
 
 public class DiscoverFragment {
-    View fragment;
+    private View fragment;
 
     public DiscoverFragment(LayoutInflater inflater, ViewGroup container) {
         fragment = inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
     public View getView() {
-        Article[] articles = (Article[]) MainActivity.getArticleManager()
-                .getArticles()
-                .toArray();
+        HashSet<Article> articlesHashSet = MainActivity.getArticleManager().getArticles();
+
+        Article[] articles = articlesHashSet.toArray(new Article[articlesHashSet.size()]);
 
         ListView list = fragment.findViewById(R.id.list_cards);
 

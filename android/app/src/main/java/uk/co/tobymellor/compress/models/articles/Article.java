@@ -21,7 +21,7 @@ public class Article extends Model {
 
     Article(ArticleInput articleInput) {
         this.newsOutletGenre  = null;
-        this.author = null;
+        this.author = articleInput.getAuthorName();
         this.date   = getDateFromMySQLFormat(articleInput.getDate());
 
         this.title                = articleInput.getTitle();
@@ -58,7 +58,7 @@ public class Article extends Model {
 
     public String getHumanDate() { return humanDate; }
 
-    public NewsOutletGenre getGenre() {
+    public NewsOutletGenre getNewsOutletGenre() {
         return newsOutletGenre;
     }
 

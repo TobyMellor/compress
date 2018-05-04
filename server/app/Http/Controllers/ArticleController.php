@@ -8,6 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Validator;
 
 use App\Article;
+use App\Author;
 use App\CheckCache;
 use App\NewsOutlet;
 use App\NewsOutletGenre;
@@ -34,9 +35,12 @@ class ArticleController extends Controller
             $articles = Article::where('date', '>=', $fromDate)
                                ->orderBy('date', 'desc')
                                ->limit(20)
+                               ->with('author')
                                ->get();
         } else {
             $articles = Article::limit(20)
+                               ->orderBy('date', 'desc')
+                               ->with('author')
                                ->get();
         }
 
@@ -68,7 +72,7 @@ class ArticleController extends Controller
                                            ->pluck('news_outlet.slug'); // The Slugs of those news outlets
 
                 $latestCrawls = CheckCache::whereIn('news_outlet_slug', $newsOutletSlugs)
-                                           ->orderBy('id', 'desc')
+                                        ->orderBy('id', 'desc')
                                            ->get()
                                            ->unique('news_outlet_slug'); // Gets the latest crawl for each news outlet
 
@@ -124,9 +128,30 @@ class ArticleController extends Controller
                 'query' => $queryParams
             ])->getBody()->getContents());
 
+            $newsOutlets = [];
+
+            foreach ($newsOutletSlugs as $newsOutletSlug) {
+                $newsOutlets[$newsOutletSlug] = NewsOutlet::where('slug', $newsOutletSlug)->first();
+            }
+
             foreach ($response->articles as $article) {
-                if ($article->author) {
-                    // TODO: Create author
+                $newsOutlet = $newsOutlets[$article->source->id];
+                $author = null;
+
+                // Don't create authors that: are null, are a url or contain the company name
+                if ($article->author
+                        && !filter_var($article->author, FILTER_VALIDATE_URL)
+                        && strpos(strtolower($newsOutlet->name), strtolower($article->author)) === false) {
+                    $author = Author::updateOrCreate(
+                        [
+                            'name'           => $article->author,
+                            'news_outlet_id' => $newsOutlet->id
+                        ],
+                        [
+                            'name'           => $article->author,
+                            'news_outlet_id' => $newsOutlet->id
+                        ]
+                    )->id;
                 }
 
                 $article = new Article([
@@ -135,8 +160,8 @@ class ArticleController extends Controller
                     'three_sentence_summary' => 'Coming soon...',
                     'seven_sentence_summary' => 'Coming soon...',
                     'article_link'           => $article->url,
-                    'author_id'              => null,
-                    'news_outlet_genre_id'   => 1,
+                    'author_id'              => $author,
+                    'news_outlet_genre_id'   => 1, // TODO: Retrieve this from crawling the $article->url
                     'date'                   => $article->publishedAt
                 ]);
 

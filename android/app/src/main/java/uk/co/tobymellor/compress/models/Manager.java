@@ -29,7 +29,9 @@ abstract public class Manager {
             paramString.append(param.getKey()).append('=').append(param.getValue());
         }
 
-        return String.format("%s/%s%s", Manager.BASE_URL, endpoint, paramString.toString().replace(" ", "+"));
+        String finalParamString = paramString.toString().replace(" ", "+");
+
+        return String.format("%s/%s%s", Manager.BASE_URL, endpoint, finalParamString);
     }
 
     protected void populateFromJSON(Manager manager, Class<? extends Model> ModelType, Class<? extends JSONInput> JSONInputType, String json) throws Exception {

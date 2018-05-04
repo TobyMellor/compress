@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
-
-@SuppressWarnings("FieldCanBeLocal")
+import uk.co.tobymellor.compress.models.authors.Author;
+import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public abstract class ComPressCardView {
     private TextView title;
@@ -35,8 +35,15 @@ public abstract class ComPressCardView {
         title.setText(article.getTitle());
         authorSummary.setText(article.getAuthorSummary());
 
-        authorCompany.setText(article.getAuthor().getName());
-        authorName.setText(article.getAuthor().getName());
+        authorCompany.setText(article.getNewsOutletGenre().getNewsOutlet().toString());
+
+        Author author = article.getAuthor();
+
+        if (!(author instanceof NewsOutlet)) {
+            authorName.setText(article.getAuthor().getName());
+        } else {
+            authorName.setText("");
+        }
     }
 
     public View getView() {

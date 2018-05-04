@@ -1,10 +1,14 @@
 package uk.co.tobymellor.compress.models.news_outlets;
 
-public class NewsOutlet {
+import uk.co.tobymellor.compress.models.authors.Author;
+
+public class NewsOutlet extends Author {
     private final String name;
     private final String slug;
 
     public NewsOutlet(String name, String slug) {
+        super(name);
+
         this.name = name;
         this.slug = slug;
     }
@@ -15,5 +19,10 @@ public class NewsOutlet {
 
     public String getSlug() {
         return slug;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

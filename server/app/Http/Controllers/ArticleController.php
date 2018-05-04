@@ -35,12 +35,12 @@ class ArticleController extends Controller
             $articles = Article::where('date', '>=', $fromDate)
                                ->orderBy('date', 'desc')
                                ->limit(20)
-                               ->with('author:name')
+                               ->with('author')
                                ->get();
         } else {
-            $articles = Article::limit(20)
-                               ->orderBy('date', 'desc')
-                               ->with('author:name')
+            $articles = Article::orderBy('date', 'desc')
+                               ->limit(20)
+                               ->with('author')
                                ->get();
         }
 

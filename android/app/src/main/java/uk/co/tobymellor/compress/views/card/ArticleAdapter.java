@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
+import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public class ArticleAdapter extends ArrayAdapter<Article> {
     private final Article[] articles;
@@ -195,7 +196,14 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         TextView textSummary = fullArticle.findViewById(R.id.text_summary);
 
         textTitle.setText(article.getTitle());
-        textAuthorDetails.setText(String.format("%s from %s", article.getAuthor().getName(), article.getAuthor().getName()));
+
+        if (article.getAuthor() instanceof NewsOutlet) {
+            textAuthorDetails.setText(String.format("From %s", article.getAuthor().getName()));
+        } else {
+            textAuthorDetails.setText(String.format("%s from %s", article.getAuthor().getName(), article.getNewsOutletGenre().getNewsOutlet().getName()));
+        }
+
+
         textSummary.setText("Soon...");
 
     }

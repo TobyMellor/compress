@@ -2,41 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\TransferStats;
+
 class ArticleShortener {
+    const SMMRY_ENDPOINT       = 'http://api.smmry.com';
+    const SHORT_SENTENCE_COUNT = 3;
+    const LONG_SENTENCE_COUNT  = 7;
+
     private $articleLink;
 
     // The attributes that will be populated by this class
-    private $threeSentenceSummary;
-    private $sevenSentenceSummary;
+    private $shortSentenceSummary;
+    private $longSentenceSummary = null;
 
     public function __construct($articleLink) {
         $this->articleLink = $articleLink;
 
-        $this->shorten();
+        $this->shortSentenceSummary = $this->shorten(self::SHORT_SENTENCE_COUNT);
+
+        // Don't bother retrieving the longer summary if the article couldn't be shortened to self::SHORT_SENTENCE_COUNT sentences
+        if (substr_count($this->shortSentenceSummary, '[BREAK]') <= self::SHORT_SENTENCE_COUNT) {
+            $this->longSentenceSummary = $this->shorten(self::LONG_SENTENCE_COUNT);
+        }
     }
     
-    public function getFullArticleBody() {
-        return $this->fullArticleBody;
+    public function getArticleLink() {
+        return $this->articleLink;
     }
 
-    public function getThreeSentenceSummary() {
-        return $this->threeSentenceSummary;
+    public function getShortSentenceSummary() {
+        return $this->shortSentenceSummary;
     }
 
-    public function getSevenSentenceSummary() {
-        return $this->sevenSentenceSummary;
+    public function getLongSentenceSummary() {
+        return $this->longSentenceSummary;
     }
 
-    private function crawl() {
-        $client         = new Client();
-        $newsOutletSlug = $this->newsOutletSlug;
+    private function shorten($sentenceCount) {
+        $client = new Client();
 
         try {
-            $response = $client->request('GET', null, [
+            $response = json_decode($client->request('GET', self::SMMRY_ENDPOINT, [
                 'query' => [
-                    //
+                    'SM_API_KEY'    => env('COMPRESS_SMMRY_KEY'),
+                    'SM_LENGTH'     => 7,
+                    'SM_WITH_BREAK' => true,
+                    'SM_URL'        => $this->articleLink
                 ]
-            ])->getBody()->getContents();
+            ])->getBody()->getContents());
+
+            return $response->sm_api_content;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             var_dump($e->getResponse()->getBody()->getContents());
         }

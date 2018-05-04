@@ -21,7 +21,8 @@ use GuzzleHttp\Client;
 date_default_timezone_set('Europe/London');
 
 class ArticleController extends Controller {
-    const NEWS_API_ENDPOINT = 'https://newsapi.org/v2/everything';
+    const NEWSAPI_ENDPOINT = 'https://newsapi.org/v2/everything';
+    const PAGE_SIZE = 3;
 
     public function index(Request $request) {
         $this->validate($request, [
@@ -37,12 +38,12 @@ class ArticleController extends Controller {
         if ($fromDate) {
             $articles = Article::where('date', '>=', $fromDate)
                                ->orderBy('date', 'desc')
-                               ->limit(20)
+                               ->limit(self::PAGE_SIZE)
                                ->with('author')
                                ->get();
         } else {
             $articles = Article::orderBy('date', 'desc')
-                               ->limit(20)
+                               ->limit(self::PAGE_SIZE)
                                ->with('author')
                                ->get();
         }
@@ -119,7 +120,7 @@ class ArticleController extends Controller {
         $queryParams = [
             'apiKey'   => env('COMPRESS_NEWSAPI_KEY'),
             'sources'  => implode(',', $newsOutletSlugs),
-            'pageSize' => 20
+            'pageSize' => self::PAGE_SIZE
         ];
 
         if ($from) {
@@ -127,7 +128,7 @@ class ArticleController extends Controller {
         }
 
         try {
-            $response = json_decode($client->request('GET', self::NEWS_API_ENDPOINT, [
+            $response = json_decode($client->request('GET', self::NEWSAPI_ENDPOINT, [
                 'query' => $queryParams
             ])->getBody()->getContents());
 
@@ -157,7 +158,21 @@ class ArticleController extends Controller {
                     )->id;
                 }
 
-                $articleCrawler = new ArticleCrawler($article->url, $article->source->id);
+                $articleCrawler   = new ArticleCrawler($article->url, $article->source->id);
+                $articleShortener = new ArticleShortener($article->url);
+
+                $article = new Article([
+                    'title'                  => $article->title,
+                    'author_summary'         => $article->description,
+                    'short_sentence_summary' => $articleShortener->getShortSentenceSummary(),
+                    'long_sentence_summary'  => $articleShortener->getLongSentenceSummary(),
+                    'article_link'           => $article->url,
+                    'author_id'              => $author,
+                    'news_outlet_genre_id'   => $articleCrawler->getNewsOutletGenreId(),
+                    'date'                   => $article->publishedAt
+                ]);
+
+                $article->save();
             }
 
             // Indicate to future requests that we have now cached this news outlet

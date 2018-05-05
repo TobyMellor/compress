@@ -18,8 +18,12 @@ class CreateArticleTable extends Migration
 
             $table->string('title');
             $table->string('author_summary');
-            $table->string('three_sentence_summary');
-            $table->string('seven_sentence_summary');
+
+            $table->string('short_sentence_summary')
+                  ->nullable();
+            $table->string('long_sentence_summary')
+                  ->nullable();
+
             $table->string('article_link');
 
             $table->integer('author_id')
@@ -30,7 +34,8 @@ class CreateArticleTable extends Migration
                   ->on('author');
 
             $table->integer('news_outlet_genre_id')
-                  ->unsigned();
+                  ->unsigned()
+                  ->nullable();
             $table->foreign('news_outlet_genre_id')
                   ->references('id')
                   ->on('news_outlet_genre');

@@ -55,15 +55,17 @@ class ArticleCrawler {
                 
                 $genre     = call_user_func([$this, $crawlMethod], $doc);
                 $genreSlug = strtolower(str_replace(' ', '-', $genre));
-
-                $this->newsOutletGenreId = NewsOutletGenre::whereHas('news_outlet', function($query) use ($newsOutletSlug) {
+                
+                $newsOutletGenres = NewsOutletGenre::whereHas('news_outlet', function($query) use ($newsOutletSlug) {
                         $query->where('news_outlet.slug', $newsOutletSlug);
                     })
                     ->whereHas('genre', function($query) use ($genreSlug) {
                         $query->where('genre.slug', $genreSlug);
-                    })
-                    ->first()
-                    ->id;
+                    });
+
+                if ($newsOutletGenres->count() > 0) {
+                    $this->newsOutletGenreId = $newsOutletGenres->first()->id;
+                }
             }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             var_dump($e->getResponse()->getBody()->getContents());

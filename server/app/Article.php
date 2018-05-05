@@ -19,8 +19,8 @@ class Article extends Model
     protected $fillable = [
         'title',
         'author_summary',
-        'three_sentence_summary',
-        'seven_sentence_summary',
+        'short_sentence_summary',
+        'long_sentence_summary',
         'article_link',
         'author_id',
         'news_outlet_genre_id',

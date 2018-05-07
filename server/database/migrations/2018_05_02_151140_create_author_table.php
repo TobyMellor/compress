@@ -18,10 +18,9 @@ class CreateAuthorTable extends Migration
 
             $table->string('name');
 
-            $table->integer('news_outlet_id')
-                  ->unsigned();
-            $table->foreign('news_outlet_id')
-                  ->references('id')
+            $table->string('news_outlet_slug');
+            $table->foreign('news_outlet_slug')
+                  ->references('slug')
                   ->on('news_outlet');
         });
     }

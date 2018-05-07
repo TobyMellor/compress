@@ -41,15 +41,13 @@ class GenreTableSeeder extends Seeder
             ]
         ];
 
-        foreach ($newsOutlets as $newsOutlet => $genres) {
-            $newsOutlet = NewsOutlet::where('slug', $newsOutlet)->first();
-
+        foreach ($newsOutlets as $newsOutletSlug => $genres) {
             foreach ($genres as $genre) {
                 $genre = Genre::updateOrCreate(['slug' => $genre['slug']], $genre);
 
                 NewsOutletGenre::insert([
-                    'news_outlet_id' => $newsOutlet->id,
-                    'genre_id'       => $genre->id
+                    'news_outlet_slug' => $newsOutletSlug,
+                    'genre_slug'       => $genre->slug
                 ]);
             }
         }

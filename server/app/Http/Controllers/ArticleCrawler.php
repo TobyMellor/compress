@@ -17,9 +17,23 @@ class ArticleCrawler {
     // The attributes that will be populated by this class
     private $newsOutletGenreId;
 
+    private $excludedUrls = [
+        'jobs.mashable.com',
+        'bbc.co.uk/sport/'
+    ];
+
     public function __construct($articleLink, $newsOutletSlug) {
         $this->articleLink    = $articleLink;
         $this->newsOutletSlug = $newsOutletSlug;
+
+        foreach ($this->excludedUrls as $excludedUrl) {
+            if (strpos($articleLink, $excludedUrl) !== false) {
+                $this->newsOutletGenreId = null;
+
+                return;
+            }
+        }
+
 
         $this->crawl();
     }
@@ -61,10 +75,11 @@ class ArticleCrawler {
                     })
                     ->whereHas('genre', function($query) use ($genreSlug) {
                         $query->where('genre.slug', $genreSlug);
-                    });
+                    })
+                    ->first();
 
-                if ($newsOutletGenres->count() > 0) {
-                    $this->newsOutletGenreId = $newsOutletGenres->first()->id;
+                if ($newsOutletGenres) {
+                    $this->newsOutletGenreId = $newsOutletGenres->id;
                 }
             }
         } catch (\GuzzleHttp\Exception\ClientException $e) {

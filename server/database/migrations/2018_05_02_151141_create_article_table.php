@@ -19,12 +19,13 @@ class CreateArticleTable extends Migration
             $table->string('title');
             $table->string('author_summary');
 
-            $table->string('short_sentence_summary')
+            $table->longtext('short_sentence_summary')
                   ->nullable();
-            $table->string('long_sentence_summary')
+            $table->longtext('long_sentence_summary')
                   ->nullable();
 
-            $table->string('article_link');
+            $table->string('article_link')
+                  ->unique();
 
             $table->integer('author_id')
                   ->unsigned()

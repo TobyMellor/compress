@@ -14,10 +14,9 @@ class CreateNewsOutletTable extends Migration
     public function up()
     {
         Schema::create('news_outlet', function (Blueprint $table) {
-            $table->increments('id');
-
             $table->string('slug')
                   ->unique();
+                  
             $table->string('name');
         });
     }

@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
-    protected $table = 'genre';
-    public $timestamps = false;
+    protected $table      = 'genre';
+    protected $primaryKey = 'slug';
+
+    public $timestamps   = false;
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -19,10 +22,7 @@ class Genre extends Model
         'name'
     ];
 
-    /**
-     * Get the articles that fall under this Genre
-     */
-    public function article() {
-        return $this->hasMany(Article::class, 'genre_id', 'id');
+    public function news_outlet_genre() {
+        return $this->hasMany(NewsOutletGenre::class, 'genre_slug', 'slug');
     }
 }

@@ -16,6 +16,6 @@ class Author extends Model
      */
     protected $fillable = [
         'name',
-        'news_outlet_id'
+        'news_outlet_slug'
     ];
 }

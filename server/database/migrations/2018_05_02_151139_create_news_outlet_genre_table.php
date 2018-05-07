@@ -15,17 +15,15 @@ class CreateNewsOutletGenreTable extends Migration
     {
         Schema::create('news_outlet_genre', function (Blueprint $table) {
             $table->increments('id');
-
-            $table->integer('genre_id')
-                  ->unsigned();
-            $table->foreign('genre_id')
-                  ->references('id')
+            
+            $table->string('genre_slug');
+            $table->foreign('genre_slug')
+                  ->references('slug')
                   ->on('genre');
 
-            $table->integer('news_outlet_id')
-                  ->unsigned();
-            $table->foreign('news_outlet_id')
-                  ->references('id')
+            $table->string('news_outlet_slug');
+            $table->foreign('news_outlet_slug')
+                  ->references('slug')
                   ->on('news_outlet');
         });
     }

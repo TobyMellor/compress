@@ -22,6 +22,10 @@ class NewsOutlet extends Model
         'name'
     ];
 
+    protected $appends = [
+        'image_link'
+    ];
+
     /**
      * Get the articles by this news outlet
      */
@@ -39,5 +43,9 @@ class NewsOutlet extends Model
                     })
                     ->pluck('slug')
                     ->toArray();
+    }
+
+    public function getImageLinkAttribute() {
+        return app()->basePath('public/images/news_outlet/' . $this->attributes['slug'] . '.jpg');
     }
 }

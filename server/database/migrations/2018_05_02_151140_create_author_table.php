@@ -16,6 +16,9 @@ class CreateAuthorTable extends Migration
         Schema::create('author', function (Blueprint $table) {
             $table->increments('id');
 
+            $table->string('image_link')
+                  ->nullable();
+
             $table->string('name');
 
             $table->string('news_outlet_slug');

@@ -22,7 +22,15 @@ class Genre extends Model
         'name'
     ];
 
+    protected $appends = [
+        'image_link'
+    ];
+
     public function news_outlet_genre() {
         return $this->hasMany(NewsOutletGenre::class, 'genre_slug', 'slug');
+    }
+
+    public function getImageLinkAttribute() {
+        return app()->basePath('public/images/genres/' . $this->attributes['slug'] . '.jpg');
     }
 }

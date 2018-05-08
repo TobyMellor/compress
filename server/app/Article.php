@@ -21,6 +21,7 @@ class Article extends Model
         'author_summary',
         'short_sentence_summary',
         'long_sentence_summary',
+        'article_image_link',
         'article_link',
         'author_id',
         'news_outlet_genre_id',

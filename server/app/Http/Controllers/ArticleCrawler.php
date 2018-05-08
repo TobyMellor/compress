@@ -16,15 +16,16 @@ class ArticleCrawler {
 
     // The attributes that will be populated by this class
     private $newsOutletGenreId;
+    private $authorImageLink = null;
 
     private $excludedUrls = [
         'jobs.mashable.com',
         'bbc.co.uk/sport/'
     ];
 
-    public function __construct($articleLink, $newsOutletSlug) {
-        $this->articleLink    = $articleLink;
-        $this->newsOutletSlug = $newsOutletSlug;
+    public function __construct($articleLink, $newsOutletSlug, $shouldCrawlAuthor) {
+        $this->articleLink     = $articleLink;
+        $this->newsOutletSlug  = $newsOutletSlug;
 
         foreach ($this->excludedUrls as $excludedUrl) {
             if (strpos($articleLink, $excludedUrl) !== false) {
@@ -35,7 +36,7 @@ class ArticleCrawler {
         }
 
 
-        $this->crawl();
+        $this->crawl($shouldCrawlAuthor);
     }
 
     public function getArticleLink() {
@@ -50,7 +51,11 @@ class ArticleCrawler {
         return $this->newsOutletGenreId;
     }
 
-    private function crawl() {
+    public function getAuthorImageLink() {
+        return $this->authorImageLink;
+    }
+
+    private function crawl($shouldCrawlAuthor) {
         $client         = new Client();
         $newsOutletSlug = $this->newsOutletSlug;
 
@@ -80,6 +85,14 @@ class ArticleCrawler {
 
                 if ($newsOutletGenres) {
                     $this->newsOutletGenreId = $newsOutletGenres->id;
+
+                    if ($shouldCrawlAuthor) {
+                        $crawlMethodAuthorPicture = $crawlMethod . 'AuthorPicture';
+                        
+                        if (method_exists($this, $crawlMethodAuthorPicture)) {
+                            $this->authorImageLink = call_user_func([$this, $crawlMethodAuthorPicture], $doc);
+                        }
+                    }
                 }
             }
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -93,6 +106,14 @@ class ArticleCrawler {
 
     private function crawlMashable(Document $doc) {
         return $doc->find('.page-header > h2')->text();
+    }
+
+    private function crawlBBCNewsAuthorPicture(Document $doc) {
+        return null;
+    }
+
+    private function crawlMashableAuthorPicture(Document $doc) {
+        return $doc->find('.article-info img.author_image')->attr('src');
     }
 
     private function getCamelCaseFromSlug($slug) {

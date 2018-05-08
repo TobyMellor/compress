@@ -206,33 +206,38 @@ class ArticleController extends Controller {
                     $articles = $response->articles;
 
                     foreach ($articles as $article) {
-                        $articleCrawler = new ArticleCrawler($article->url, $article->source->id);
+                        $author = null;
+
+                        // Don't create authors that: are null, are a url or contain the company name
+                        if ($article->author
+                                && !filter_var($article->author, FILTER_VALIDATE_URL)
+                                && strpos(strtolower($newsOutlet->name), strtolower($article->author)) === false) {
+                            $author = Author::updateOrCreate(
+                                [
+                                    'name'             => $article->author,
+                                    'news_outlet_slug' => $newsOutlet->slug
+                                ],
+                                [
+                                    'name'             => $article->author,
+                                    'news_outlet_slug' => $newsOutlet->slug
+                                ]
+                            );
+                        }
+
+                        $articleCrawler = new ArticleCrawler($article->url, $article->source->id, $author && !isset($author->image_link));
 
                         // If genre is supported
                         if ($articleCrawler->getNewsOutletGenreId() !== null) {
-                            $author = null;
-
-                            // Don't create authors that: are null, are a url or contain the company name
-                            if ($article->author
-                                    && !filter_var($article->author, FILTER_VALIDATE_URL)
-                                    && strpos(strtolower($newsOutlet->name), strtolower($article->author)) === false) {
-                                $author = Author::updateOrCreate(
-                                    [
-                                        'name'             => $article->author,
-                                        'news_outlet_slug' => $newsOutlet->slug
-                                    ],
-                                    [
-                                        'name'             => $article->author,
-                                        'news_outlet_slug' => $newsOutlet->slug
-                                    ]
-                                )->id;
+                            if ($articleCrawler->getAuthorImageLink()) {
+                                $author->update(['image_link' => $articleCrawler->getAuthorImageLink()]);
                             }
 
                             $article = new Article([
                                 'title'                  => $article->title,
                                 'author_summary'         => $article->description,
+                                'article_link_image'     => $article->urlToImage,
                                 'article_link'           => $article->url,
-                                'author_id'              => $author,
+                                'author_id'              => isset($author->id) ? $author->id : null,
                                 'news_outlet_genre_id'   => $articleCrawler->getNewsOutletGenreId(),
                                 'date'                   => $article->publishedAt
                             ]);

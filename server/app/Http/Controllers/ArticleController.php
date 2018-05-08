@@ -235,7 +235,7 @@ class ArticleController extends Controller {
                             $article = new Article([
                                 'title'                  => $article->title,
                                 'author_summary'         => $article->description,
-                                'article_link_image'     => $article->urlToImage,
+                                'article_image_link'     => $article->urlToImage,
                                 'article_link'           => $article->url,
                                 'author_id'              => isset($author->id) ? $author->id : null,
                                 'news_outlet_genre_id'   => $articleCrawler->getNewsOutletGenreId(),

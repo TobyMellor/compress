@@ -24,7 +24,8 @@ class CreateArticleTable extends Migration
             $table->longtext('long_sentence_summary')
                   ->nullable();
 
-            $table->string('article_image_link');
+            $table->string('article_image_link')
+                  ->nullable();
             $table->string('article_link')
                   ->unique();
 

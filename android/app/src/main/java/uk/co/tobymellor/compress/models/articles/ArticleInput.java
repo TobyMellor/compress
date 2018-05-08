@@ -7,9 +7,9 @@ public interface ArticleInput {
 
     String getAuthorSummary();
 
-    String getThreeSentenceSummary();
+    String getShortSentenceSummary();
 
-    String getSevenSentenceSummary();
+    String getLongSentenceSummary();
 
     String getArticleLink();
 

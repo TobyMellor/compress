@@ -14,8 +14,8 @@ public class Article extends Model {
     private final int id;
     private final String title;
     private final String authorSummary;
-    private final String threeSentenceSummary;
-    private final String sevenSentenceSummary;
+    private final String shortSentenceSummary;
+    private final String longSentenceSummary;
     private final String articleLink;
     private final Date date;
     private final String humanDate;
@@ -36,8 +36,8 @@ public class Article extends Model {
         this.id                   = articleInput.getId();
         this.title                = articleInput.getTitle();
         this.authorSummary        = articleInput.getAuthorSummary();
-        this.threeSentenceSummary = articleInput.getThreeSentenceSummary();
-        this.sevenSentenceSummary = articleInput.getSevenSentenceSummary();
+        this.shortSentenceSummary = replaceBreaks(articleInput.getShortSentenceSummary());
+        this.longSentenceSummary  = replaceBreaks(articleInput.getLongSentenceSummary());
         this.humanDate            = articleInput.getHumanDate();
         this.articleLink          = articleInput.getArticleLink();
     }
@@ -54,12 +54,12 @@ public class Article extends Model {
         return authorSummary;
     }
 
-    public String getThreeSentenceSummary() {
-        return threeSentenceSummary;
+    public String getShortSentenceSummary() {
+        return shortSentenceSummary;
     }
 
-    public String getSevenSentenceSummary() {
-        return sevenSentenceSummary;
+    public String getLongSentenceSummary() {
+        return longSentenceSummary;
     }
 
     public String getArticleLink() {
@@ -78,5 +78,17 @@ public class Article extends Model {
 
     public Author getAuthor() {
         return author;
+    }
+
+    public String getAuthorSignature() {
+        if (author instanceof NewsOutlet) {
+            return String.format("From %s", author.getName());
+        }
+
+        return String.format("%s from %s", author.getName(), newsOutletGenre.getNewsOutlet().getName());
+    }
+
+    private String replaceBreaks(String sentences) {
+        return sentences.replace("[BREAK] ", "\n\n").replace("[BREAK]", "");
     }
 }

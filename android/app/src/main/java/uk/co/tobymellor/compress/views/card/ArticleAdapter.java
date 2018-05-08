@@ -30,6 +30,8 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     private final ConstraintLayout fullArticle;
     private final FloatingActionButton floatingCloseButton;
 
+    private Article currentArticle;
+
     public ArticleAdapter(@NonNull Context context, Article[] articles, ViewGroup container) {
         super(context, 0, articles);
 
@@ -37,6 +39,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         floatingCloseButton = fullArticle.findViewById(R.id.floating_close_button);
 
         initHideArticleListener(context);
+        initFullArticleListeners(context);
 
         this.articles = articles;
     }
@@ -56,8 +59,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
     @SuppressLint("ClickableViewAccessibility")
     private void initShowArticleListener(final Context context, final CardView cardView, final Article article) {
-        final ConstraintLayout fullArticle = ((Activity) context).findViewById(R.id.constraint_full_article);
-
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,21 +191,30 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         return (float) Math.hypot(width, height);
     }
 
+    private void initFullArticleListeners(final Context context) {
+        fullArticle.findViewById(R.id.text_read_more).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView textSummary = fullArticle.findViewById(R.id.text_summary);
+                TextView textReadMore = fullArticle.findViewById(R.id.text_read_more);
+
+                textSummary.setText(currentArticle.getLongSentenceSummary());
+                textReadMore.setText(R.string.read_full_article);
+            }
+        });
+    }
+
     private void populateFullArticle(ConstraintLayout fullArticle, Article article) {
+        this.currentArticle = article;
+
         TextView textTitle = fullArticle.findViewById(R.id.text_title);
         TextView textAuthorDetails = fullArticle.findViewById(R.id.text_author_details);
         TextView textSummary = fullArticle.findViewById(R.id.text_summary);
+        TextView textReadMore = fullArticle.findViewById(R.id.text_read_more);
 
         textTitle.setText(article.getTitle());
-
-        if (article.getAuthor() instanceof NewsOutlet) {
-            textAuthorDetails.setText(String.format("From %s", article.getAuthor().getName()));
-        } else {
-            textAuthorDetails.setText(String.format("%s from %s", article.getAuthor().getName(), article.getNewsOutletGenre().getNewsOutlet().getName()));
-        }
-
-
-        textSummary.setText("Soon...");
-
+        textAuthorDetails.setText(article.getAuthorSignature());
+        textSummary.setText(article.getShortSentenceSummary() != null ? article.getShortSentenceSummary() : article.getAuthorSummary());
+        textReadMore.setText(R.string.read_long_sentence_summary);
     }
 }

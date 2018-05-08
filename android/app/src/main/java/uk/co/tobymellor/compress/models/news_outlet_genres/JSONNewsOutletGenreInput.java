@@ -5,13 +5,13 @@ import org.json.JSONObject;
 
 public class JSONNewsOutletGenreInput implements NewsOutletGenreInput {
     private int id;
-    private int newsOutletId;
-    private int genreId;
+    private String newsOutletSlug;
+    private String genreSlug;
 
     public JSONNewsOutletGenreInput(JSONObject json) throws JSONException {
-        this.id           = json.getInt("id");
-        this.newsOutletId = json.getInt("news_outlet_id");
-        this.genreId      = json.getInt("genre_id");
+        this.id             = json.getInt("id");
+        this.newsOutletSlug = json.getString("news_outlet_slug");
+        this.genreSlug      = json.getString("genre_slug");
     }
 
     @Override
@@ -20,12 +20,12 @@ public class JSONNewsOutletGenreInput implements NewsOutletGenreInput {
     }
 
     @Override
-    public int getNewsOutletId() {
-        return newsOutletId;
+    public String getNewsOutletSlug() {
+        return newsOutletSlug;
     }
 
     @Override
-    public int getGenreId() {
-        return genreId;
+    public String getGenreSlug() {
+        return genreSlug;
     }
 }

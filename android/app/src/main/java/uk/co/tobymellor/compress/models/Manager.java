@@ -11,8 +11,6 @@ import java.util.Map;
 abstract public class Manager {
     private final static String BASE_URL = "http://46.101.28.103/api";
 
-    public abstract Object get(int id);
-
     public abstract void add(Object object);
 
     public abstract void remove(Object object);
@@ -52,7 +50,7 @@ abstract public class Manager {
 
             Constructor<?> modelConstructor = ModelType.getConstructor(JSONInputType.getInterfaces()[0]);
             Constructor<?> inputConstructor = JSONInputType.getConstructor(JSONObject.class);
-
+            
             Object object = modelConstructor.newInstance(inputConstructor.newInstance(jsonElement));
 
             manager.add(object);

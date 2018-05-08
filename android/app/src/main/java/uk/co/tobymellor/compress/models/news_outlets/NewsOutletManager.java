@@ -26,10 +26,9 @@ public class NewsOutletManager extends Manager {
         super.populateFromJSON(this, NewsOutlet.class, JSONNewsOutletInput.class, task.get());
     }
 
-    @Override
-    public NewsOutlet get(int id) {
+    public NewsOutlet get(String slug) {
         for (NewsOutlet newsOutlet : newsOutlets) {
-            if (newsOutlet.getId() == id) return newsOutlet;
+            if (newsOutlet.getSlug().equals(slug)) return newsOutlet;
         }
 
         return null;

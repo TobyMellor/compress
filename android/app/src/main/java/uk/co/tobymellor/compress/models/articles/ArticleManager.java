@@ -21,7 +21,7 @@ public class ArticleManager extends Manager {
         HashMap<String, String> params = new HashMap<>();
 
         params.put("date", "2018-04-02 00:00:00");     // TODO: Replace with cached date
-        params.put("news_outlet_genre_ids", "1,2,14"); // TODO: Replace with current news_outlet_genre_ids
+        params.put("news_outlet_genre_ids", "1,2,12"); // TODO: Replace with current news_outlet_genre_ids
 
         AsyncTask<String, String, String> task = new JSONTask().execute(super.formUrl(ArticleManager.ENDPOINT, params));
 
@@ -32,7 +32,6 @@ public class ArticleManager extends Manager {
         return articles;
     }
 
-    @Override
     public Article get(int id) {
         for (Article article : articles) {
             if (article.getId() == id) return article;

@@ -35,15 +35,8 @@ public abstract class ComPressCardView {
         title.setText(article.getTitle());
         authorSummary.setText(article.getAuthorSummary());
 
-        authorCompany.setText(article.getNewsOutletGenre().getNewsOutlet().toString());
-
-        Author author = article.getAuthor();
-
-        if (!(author instanceof NewsOutlet)) {
-            authorName.setText(article.getAuthor().getName());
-        } else {
-            authorName.setText("");
-        }
+        authorCompany.setText(article.getNewsOutletGenre().getNewsOutlet().getName());
+        authorName.setText(article.getAuthorSignature());
     }
 
     public View getView() {

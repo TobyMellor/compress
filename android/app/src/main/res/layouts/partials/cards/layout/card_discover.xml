@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/read_three_sentence_summary"
+                    android:text="@string/read_short_sentence_summary"
                     android:textAllCaps="true"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"

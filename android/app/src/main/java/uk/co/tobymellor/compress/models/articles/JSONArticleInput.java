@@ -7,8 +7,8 @@ public class JSONArticleInput implements ArticleInput {
     private final int id;
     private final String title;
     private final String authorSummary;
-    private final String threeSentenceSummary;
-    private final String sevenSentenceSummary;
+    private final String shortSentenceSummary;
+    private final String longSentenceSummary;
     private final String articleLink;
     private final String date;
     private final String humanDate;
@@ -20,8 +20,8 @@ public class JSONArticleInput implements ArticleInput {
         id                   = json.getInt("id");
         title                = json.getString("title");
         authorSummary        = json.getString("author_summary");
-        threeSentenceSummary = json.getString("three_sentence_summary");
-        sevenSentenceSummary = json.getString("seven_sentence_summary");
+        shortSentenceSummary = getNullableString(json, "short_sentence_summary");
+        longSentenceSummary  = getNullableString(json, "long_sentence_summary");
         articleLink          = json.getString("article_link");
         date                 = json.getString("date");
         humanDate            = json.getString("human_date");
@@ -55,13 +55,13 @@ public class JSONArticleInput implements ArticleInput {
     }
 
     @Override
-    public String getThreeSentenceSummary() {
-        return threeSentenceSummary;
+    public String getShortSentenceSummary() {
+        return shortSentenceSummary;
     }
 
     @Override
-    public String getSevenSentenceSummary() {
-        return sevenSentenceSummary;
+    public String getLongSentenceSummary() {
+        return longSentenceSummary;
     }
 
     @Override
@@ -92,5 +92,9 @@ public class JSONArticleInput implements ArticleInput {
     @Override
     public int getAuthorId() {
         return authorId;
+    }
+
+    private String getNullableString(JSONObject json, String property) throws JSONException {
+        return json.has(property) && !json.isNull(property) ? json.getString(property) : null;
     }
 }

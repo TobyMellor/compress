@@ -16,7 +16,7 @@
     <string name="enable_notifications">Enable notifications</string>
 
     <!--Articles-->
-    <string name="read_three_sentence_summary">Read More</string>
-    <string name="read_seven_sentence_summary">Read Even More</string>
+    <string name="read_short_sentence_summary">Read More</string>
+    <string name="read_long_sentence_summary">Read Even More</string>
     <string name="read_full_article">Read Full Article</string>
 </resources>

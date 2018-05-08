@@ -29,7 +29,6 @@ public class NewsOutletGenreManager extends Manager {
         return newsOutletGenres;
     }
 
-    @Override
     public NewsOutletGenre get(int id) {
         for (NewsOutletGenre newsOutletGenre : newsOutletGenres) {
             if (newsOutletGenre.getId() == id) return newsOutletGenre;

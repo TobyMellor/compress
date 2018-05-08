@@ -12,8 +12,8 @@ public class NewsOutletGenre extends Model {
 
     public NewsOutletGenre(NewsOutletGenreInput input) {
         this.id         = input.getId();
-        this.genre      = MainActivity.getGenreManager().get(input.getGenreId());
-        this.newsOutlet = MainActivity.getNewsOutletManager().get(input.getNewsOutletId()); // input.getNewsOutletId();
+        this.genre      = MainActivity.getGenreManager().get(input.getGenreSlug());
+        this.newsOutlet = MainActivity.getNewsOutletManager().get(input.getNewsOutletSlug());
     }
 
     public int getId() {

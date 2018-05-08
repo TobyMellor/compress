@@ -25,10 +25,9 @@ public class GenreManager extends Manager {
         super.populateFromJSON(this, Genre.class, JSONGenreInput.class, task.get());
     }
 
-    @Override
-    public Genre get(int id) {
+    public Genre get(String slug) {
         for (Genre genre : genres) {
-            if (genre.getId() == id) return genre;
+            if (genre.getSlug().equals(slug)) return genre;
         }
 
         return null;

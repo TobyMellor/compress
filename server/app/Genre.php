@@ -31,6 +31,6 @@ class Genre extends Model
     }
 
     public function getImageLinkAttribute() {
-        return app()->basePath('public/images/genres/' . $this->attributes['slug'] . '.jpg');
+        return url('images/genres/' . $this->attributes['slug'] . '.jpg');
     }
 }

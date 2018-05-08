@@ -46,6 +46,6 @@ class NewsOutlet extends Model
     }
 
     public function getImageLinkAttribute() {
-        return app()->basePath('public/images/news_outlet/' . $this->attributes['slug'] . '.jpg');
+        return url('images/news_outlets/' . $this->attributes['slug'] . '.jpg');
     }
 }

@@ -43,7 +43,7 @@ class CreateArticleTable extends Migration
                   ->references('id')
                   ->on('news_outlet_genre');
 
-            $table->timestamp('date');
+            $table->dateTime('date');
         });
     }
 

@@ -17,7 +17,7 @@ class CreateArticleTable extends Migration
             $table->increments('id');
 
             $table->string('title');
-            $table->string('author_summary');
+            $table->longtext('author_summary');
 
             $table->longtext('short_sentence_summary')
                   ->nullable();

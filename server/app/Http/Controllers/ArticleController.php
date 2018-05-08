@@ -45,7 +45,7 @@ class ArticleController extends Controller {
         ]);
 
         $from = $request->has('from_date') ? $request->input('from_date') : null;
-        $to   = $request->has('to_date')   ? $request->input('to_date')   : Carbon::now();
+        $to   = $request->has('to_date')   ? $request->input('to_date')   : Carbon::parse(date('Y-m-d H:i:s'));
 
         $this->newsOutletsGenreIds = explode(',', $request->input('news_outlet_genre_ids'));
 
@@ -152,7 +152,7 @@ class ArticleController extends Controller {
 
         foreach ($unshortenedArticles as $unshortenedArticle) {
             // echo 'Would shorten ' . $unshortenedArticle->article_link . '<br/>';
-            // continue;
+            continue;
             $articleShortener = new ArticleShortener($unshortenedArticle->article_link);
 
             $unshortenedArticle->update([
@@ -171,7 +171,6 @@ class ArticleController extends Controller {
     private function crawlNewsAPI(NewsOutlet $newsOutlet, ?Carbon $from, Carbon $to) {
         $client = new Client();
         $matchedArticlesCount = 0;
-        $cacheRanges;
 
         $newsOutletGenreIds = NewsOutletGenre::whereIn('id', $this->newsOutletsGenreIds)
                                             ->where('news_outlet_slug', $newsOutlet->slug)

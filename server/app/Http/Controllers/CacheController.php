@@ -19,7 +19,7 @@ date_default_timezone_set('GMT');
  *    the 2.1's upperbound. Repeat step 1.
  */
 class CacheController {
-    private function getCheckCachesBetweenBounds(Carbon $lowerBound, Carbon $upperBound, String $newsOutletSlug, Array $checkCaches = []) {
+    private function getCheckCachesBetweenBounds(String $newsOutletSlug, Carbon $lowerBound, Carbon $upperBound, Array $checkCaches = []) {
         
         // Try to find a CheckCache that happened before/after $lowerBound,
         // return the straddler that expands closer to $upperBound
@@ -62,12 +62,12 @@ class CacheController {
             
             // If the $lowerBoundStraddler and $upperBoundStraddler don't overlap (aka there's still room for more checkCaches to be found)
             if ($lowerBoundStraddler->upper_bound->lt($upperBoundStraddler->lower_bound)) {
-                return $this->getCheckCachesBetweenBounds($lowerBoundStraddler->upper_bound, $upperBoundStraddler->lower_bound, $newsOutletSlug, $checkCaches); // iterate with narrower bounds
+                return $this->getCheckCachesBetweenBounds($newsOutletSlug, $lowerBoundStraddler->upper_bound, $upperBoundStraddler->lower_bound, $checkCaches); // iterate with narrower bounds
             }
         } else if ($lowerBoundStraddler) {
-            return $this->getCheckCachesBetweenBounds($lowerBoundStraddler->upper_bound, $upperBound, $newsOutletSlug, $checkCaches);
+            return $this->getCheckCachesBetweenBounds($newsOutletSlug, $lowerBoundStraddler->upper_bound, $upperBound, $checkCaches);
         } else if ($upperBoundStraddler) {
-            return $this->getCheckCachesBetweenBounds($lowerBound, $upperBoundStraddler->lower_bound, $newsOutletSlug, $checkCaches);
+            return $this->getCheckCachesBetweenBounds($newsOutletSlug, $lowerBound, $upperBoundStraddler->lower_bound, $checkCaches);
         } else {
             $middleCheckCaches = CheckCache::where('lower_bound', '>', $lowerBound)
                                            ->where('upper_bound', '<', $upperBound)
@@ -80,9 +80,9 @@ class CacheController {
             if ($lowestMiddleCheckCache && $highestMiddleCheckCache) {
 
                 // Get the lowest middle and the highest middle, add/sub 1 second to make them straddle the boundary
-                return $this->getCheckCachesBetweenBounds($lowestMiddleCheckCache->lower_bound->addSecond(1), $highestMiddleCheckCache->upper_bound->subSecond(1), $newsOutletSlug, $checkCaches);
+                return $this->getCheckCachesBetweenBounds($newsOutletSlug, $lowestMiddleCheckCache->lower_bound->addSecond(1), $highestMiddleCheckCache->upper_bound->subSecond(1), $checkCaches);
             } else if ($lowestMiddleCheckCache) {
-                return $this->getCheckCachesBetweenBounds($lowestMiddleCheckCache->lower_bound->addSecond(1), $lowestMiddleCheckCache->upper_bound->subSecond(1), $newsOutletSlug, $checkCaches);
+                return $this->getCheckCachesBetweenBounds($newsOutletSlug, $lowestMiddleCheckCache->lower_bound->addSecond(1), $lowestMiddleCheckCache->upper_bound->subSecond(1), $checkCaches);
             }
         }
 
@@ -106,7 +106,7 @@ class CacheController {
         $newsOutletsUncachedRanges = [];
 
         foreach ($newsOutletSlugs as $newsOutletSlug) {
-            $checkCaches = $this->getCheckCachesBetweenBounds($from, $to, $newsOutletSlug);
+            $checkCaches = $this->getCheckCachesBetweenBounds($newsOutletSlug, $from, $to);
 
             $newsOutletsUncachedRanges[$newsOutletSlug] = $this->getNewsOutletUncachedRanges($checkCaches, $from, $to);
         }
@@ -118,13 +118,18 @@ class CacheController {
         if ($from) {
             if ($from->eq($to)) return [];
 
-            $checkCaches = $this->getCheckCachesBetweenBounds($from, $to, $newsOutletSlug);
+            $checkCaches = $this->getCheckCachesBetweenBounds($newsOutletSlug, $from, $to);
         } else {
             $checkCaches = CheckCache::where('news_outlet_slug', $newsOutletSlug)
-                                     ->where('upper_bound', '<=', $to)
+                                     ->where('lower_bound', '<=', $to)
                                      ->orderBy('lower_bound', 'ASC')
                                      ->get()
                                      ->all();
+        }
+
+        // trim the last cache range so it's upper_bound is max $to
+        if (sizeOf($checkCaches) > 0 && $checkCaches[sizeOf($checkCaches) - 1]->upper_bound->gt($to)) {
+            $checkCaches[sizeOf($checkCaches) - 1]->upper_bound = $to;
         }
 
         $uncachedRanges = array_map(function($uncachedRange) {
@@ -144,7 +149,13 @@ class CacheController {
         $cacheRanges = array_merge($uncachedRanges, $cachedRanges);
 
         usort($cacheRanges, function($a, $b) {
-            return $a['to'] < $b['to'];
+            if (!isset($a['from'])) {
+                return 1;
+            } else if (!isset($b['from'])) {
+                return 0;
+            }
+
+            return $a['to'] <= $b['to'] && $a['from'] <= $b['from'];
         });
 
         return $cacheRanges;
@@ -164,6 +175,7 @@ class CacheController {
         // Merge the potential overlapping CheckCache's to make things easier
         $checkCaches = $this->mergeRanges($checkCaches);
 
+
         $uncachedRanges = [];
         $firstCheckCache = $checkCaches[0];
 
@@ -175,7 +187,7 @@ class CacheController {
                 return [];
             }
         } else {
-            if (!$from) {
+            if ($from) {
                 $uncachedRanges[] = ['from' => $from, 'to' => $firstCheckCache->lower_bound];
             } else {
                 $uncachedRanges[] = ['to' => $firstCheckCache->lower_bound];
@@ -184,23 +196,26 @@ class CacheController {
 
         if (sizeOf($checkCaches) > 1) {
             $uncachedRanges[] = ['from' => $firstCheckCache->upper_bound];
-        } else if (sizeOf($checkCaches) === 1) {
+        } else if (sizeOf($checkCaches) === 1 && !$firstCheckCache->upper_bound->eq($to)) {
             $uncachedRanges[] = ['from' => $firstCheckCache->upper_bound, 'to' => $to];
         }
 
         unset($checkCaches[0]);
+        $checkCaches = array_values($checkCaches);
 
         foreach ($checkCaches as $index => $checkCache) {
             if ($index < sizeOf($checkCaches) - 1) {
-                $nextCheckCache = $checkCaches[$index + 1];
-
-                $uncachedRanges[sizeOf($uncachedRanges) - 1]['to'] = $nextCheckCache->lower_bound;
-                $uncachedRanges[] = ['from' => $nextCheckCache->upper_bound];
+                $uncachedRanges[sizeOf($uncachedRanges) - 1]['to'] = $checkCache->lower_bound;
+                $uncachedRanges[] = ['from' => $checkCache->upper_bound];
             } else {
-                if ($checkCache->upper_bound->gte($to)) {
-                    unset($uncachedRanges[sizeOf($uncachedRanges) - 1]);
+                if ($checkCache->upper_bound->lte($to)) {
+                    $uncachedRanges[sizeOf($uncachedRanges) - 1]['to'] = $checkCache->lower_bound;
+
+                    if (!$checkCache->upper_bound->eq($to)) {
+                        $uncachedRanges[] = ['from' => $checkCache->upper_bound, 'to' => $to];
+                    }
                 } else {
-                    $uncachedRanges[sizeOf($uncachedRanges) - 1]['to'] = $to;
+                    $uncachedRanges[sizeOf($uncachedRanges) - 1]['to'] = $checkCache->lower_bound;
                 }
             }
         }
@@ -214,7 +229,7 @@ class CacheController {
 
             $nextCheckCache = $checkCaches[$index + 1];
 
-            if ($checkCache->upper_bound->gt($nextCheckCache->lower_bound)) {
+            if ($checkCache->upper_bound->gte($nextCheckCache->lower_bound)) {
                 $nextCheckCache->lower_bound = $checkCache->lower_bound->format('Y-m-d H:i:s');
                 
                 $checkCaches[$index] = null;

@@ -50,7 +50,7 @@ abstract public class Manager {
 
             Constructor<?> modelConstructor = ModelType.getConstructor(JSONInputType.getInterfaces()[0]);
             Constructor<?> inputConstructor = JSONInputType.getConstructor(JSONObject.class);
-            
+
             Object object = modelConstructor.newInstance(inputConstructor.newInstance(jsonElement));
 
             manager.add(object);

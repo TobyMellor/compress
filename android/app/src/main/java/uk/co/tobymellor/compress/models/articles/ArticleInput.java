@@ -11,6 +11,8 @@ public interface ArticleInput {
 
     String getLongSentenceSummary();
 
+    String getArticleImageLink();
+
     String getArticleLink();
 
     String getDate();
@@ -22,4 +24,6 @@ public interface ArticleInput {
     int getAuthorId();
 
     String getAuthorName();
+
+    String getAuthorImageLink();
 }

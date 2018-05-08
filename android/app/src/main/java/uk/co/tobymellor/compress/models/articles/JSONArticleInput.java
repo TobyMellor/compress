@@ -9,12 +9,14 @@ public class JSONArticleInput implements ArticleInput {
     private final String authorSummary;
     private final String shortSentenceSummary;
     private final String longSentenceSummary;
+    private final String articleImageLink;
     private final String articleLink;
     private final String date;
     private final String humanDate;
     private final int newsOutletGenreId;
-    private final String authorName;
     private final int authorId;
+    private final String authorName;
+    private final String authorImageLink;
 
     public JSONArticleInput(JSONObject json) throws JSONException {
         id                   = json.getInt("id");
@@ -22,6 +24,7 @@ public class JSONArticleInput implements ArticleInput {
         authorSummary        = json.getString("author_summary");
         shortSentenceSummary = getNullableString(json, "short_sentence_summary");
         longSentenceSummary  = getNullableString(json, "long_sentence_summary");
+        articleImageLink     = json.getString("article_image_link");
         articleLink          = json.getString("article_link");
         date                 = json.getString("date");
         humanDate            = json.getString("human_date");
@@ -32,9 +35,11 @@ public class JSONArticleInput implements ArticleInput {
 
             authorId   = author.getInt("id");
             authorName = author.getString("name");
+            authorImageLink = getNullableString(author, "image_link");
         } else {
-            authorId   = -1;
+            authorId = -1;
             authorName = null;
+            authorImageLink = null;
         }
     }
 
@@ -65,6 +70,11 @@ public class JSONArticleInput implements ArticleInput {
     }
 
     @Override
+    public String getArticleImageLink() {
+        return articleImageLink;
+    }
+
+    @Override
     public String getArticleLink() {
         return articleLink;
     }
@@ -85,13 +95,18 @@ public class JSONArticleInput implements ArticleInput {
     }
 
     @Override
+    public int getAuthorId() {
+        return authorId;
+    }
+
+    @Override
     public String getAuthorName() {
         return authorName;
     }
 
     @Override
-    public int getAuthorId() {
-        return authorId;
+    public String getAuthorImageLink() {
+        return authorImageLink;
     }
 
     private String getNullableString(JSONObject json, String property) throws JSONException {

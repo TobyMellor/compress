@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraint_card_header">
 
                 <ImageView
-                    android:id="@+id/image_post"
+                    android:id="@+id/image_article"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:adjustViewBounds="true"
@@ -50,8 +50,8 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/image_post"
-                    app:layout_constraintTop_toTopOf="@+id/image_post" />
+                    app:layout_constraintStart_toEndOf="@+id/image_article"
+                    app:layout_constraintTop_toTopOf="@+id/image_article" />
 
                 <TextView
                     android:id="@+id/text_author_summary"
@@ -62,7 +62,7 @@
                     android:layout_marginTop="4dp"
                     android:textColor="@color/colorGrey"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/image_post"
+                    app:layout_constraintStart_toEndOf="@+id/image_article"
                     app:layout_constraintTop_toBottomOf="@+id/text_title" />
 
             </android.support.constraint.ConstraintLayout>

@@ -4,4 +4,6 @@ public interface NewsOutletInput {
     String getName();
 
     String getSlug();
+
+    String getImageLink();
 }

@@ -6,6 +6,10 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,13 +23,18 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
+import uk.co.tobymellor.compress.DownloadImageTask;
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public class ArticleAdapter extends ArrayAdapter<Article> {
+    private final HashMap<Integer, View> cardViews = new HashMap<>();
     private final Article[] articles;
     private final ConstraintLayout fullArticle;
     private final FloatingActionButton floatingCloseButton;
@@ -50,6 +59,8 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             Article article = articles[position];
 
             convertView = new DiscoverCardView(getContext(), container, article).getView();
+
+            cardViews.put(article.getId(), convertView);
 
             initShowArticleListener(getContext(), (CardView) convertView.findViewById(R.id.card_view), article);
         }
@@ -197,9 +208,27 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             public void onClick(View v) {
                 TextView textSummary = fullArticle.findViewById(R.id.text_summary);
                 TextView textReadMore = fullArticle.findViewById(R.id.text_read_more);
+                TextView textReadFullArticle = fullArticle.findViewById(R.id.text_read_full_article);
 
                 textSummary.setText(currentArticle.getLongSentenceSummary());
-                textReadMore.setText(R.string.read_full_article);
+                textReadMore.setVisibility(View.INVISIBLE);
+                textReadFullArticle.setVisibility(View.VISIBLE);
+            }
+        });
+
+        initExternalArticleListener(context, fullArticle.findViewById(R.id.text_title));
+        initExternalArticleListener(context, fullArticle.findViewById(R.id.text_read_full_article));
+    }
+
+    private void initExternalArticleListener(final Context context, final View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent externalArticle = new Intent(Intent.ACTION_VIEW);
+
+                externalArticle.setData(Uri.parse(currentArticle.getArticleLink()));
+
+                context.startActivity(externalArticle);
             }
         });
     }
@@ -207,14 +236,36 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     private void populateFullArticle(ConstraintLayout fullArticle, Article article) {
         this.currentArticle = article;
 
+        ImageView articleImage = fullArticle.findViewById(R.id.image_article);
+        ImageView authorImage = fullArticle.findViewById(R.id.image_author);
+
         TextView textTitle = fullArticle.findViewById(R.id.text_title);
         TextView textAuthorDetails = fullArticle.findViewById(R.id.text_author_details);
         TextView textSummary = fullArticle.findViewById(R.id.text_summary);
         TextView textReadMore = fullArticle.findViewById(R.id.text_read_more);
+        TextView textReadFullArticle = fullArticle.findViewById(R.id.text_read_full_article);
+
+        // Reuse existing images instead of reloading from the server
+        View cardView = cardViews.get(article.getId());
+
+        // Reuse the articles image
+        ImageView existingArticleImageView  = cardView.findViewById(R.id.image_article);
+        BitmapDrawable existingArticleImage = (BitmapDrawable) existingArticleImageView.getDrawable();
+        
+        articleImage.setImageBitmap(existingArticleImage.getBitmap());
+
+        // Reuse the authors image
+        ImageView existingAuthorImageView  = cardView.findViewById(R.id.image_author);
+        BitmapDrawable existingAuthorImage = (BitmapDrawable) existingAuthorImageView.getDrawable();
+
+        authorImage.setImageBitmap(existingAuthorImage.getBitmap());
 
         textTitle.setText(article.getTitle());
         textAuthorDetails.setText(article.getAuthorSignature());
         textSummary.setText(article.getShortSentenceSummary() != null ? article.getShortSentenceSummary() : article.getAuthorSummary());
-        textReadMore.setText(R.string.read_long_sentence_summary);
+
+
+        textReadMore.setVisibility(View.VISIBLE);
+        textReadFullArticle.setVisibility(View.INVISIBLE);
     }
 }

@@ -16,17 +16,20 @@ public class Article extends Model {
     private final String authorSummary;
     private final String shortSentenceSummary;
     private final String longSentenceSummary;
+    private final String articleImageLink;
     private final String articleLink;
     private final Date date;
     private final String humanDate;
     private final NewsOutletGenre newsOutletGenre;
     private final Author author;
 
+    private static final String EXCLUDE_FROM_SUMMARY = "SEE\\ ALSO(.*)";
+
     public Article(ArticleInput articleInput) {
         this.newsOutletGenre = MainActivity.getNewsOutletGenreManager().get(articleInput.getNewsOutletGenreId());
 
         if (articleInput.getAuthorId() != -1) {
-            this.author = new Author(articleInput.getAuthorName());
+            this.author = new Author(articleInput.getAuthorName(), articleInput.getAuthorImageLink(), newsOutletGenre.getNewsOutlet());
         } else {
             this.author = newsOutletGenre.getNewsOutlet();
         }
@@ -38,8 +41,9 @@ public class Article extends Model {
         this.authorSummary        = articleInput.getAuthorSummary();
         this.shortSentenceSummary = replaceBreaks(articleInput.getShortSentenceSummary());
         this.longSentenceSummary  = replaceBreaks(articleInput.getLongSentenceSummary());
-        this.humanDate            = articleInput.getHumanDate();
+        this.articleImageLink     = articleInput.getArticleImageLink();
         this.articleLink          = articleInput.getArticleLink();
+        this.humanDate            = articleInput.getHumanDate();
     }
 
     public int getId() {
@@ -51,7 +55,10 @@ public class Article extends Model {
     }
 
     public String getAuthorSummary() {
-        return authorSummary;
+        return authorSummary
+                .replace(". ", "\n\n")
+                .replaceAll(Article.EXCLUDE_FROM_SUMMARY, "")
+                .trim();
     }
 
     public String getShortSentenceSummary() {
@@ -60,6 +67,10 @@ public class Article extends Model {
 
     public String getLongSentenceSummary() {
         return longSentenceSummary;
+    }
+
+    public String getArticleImageLink() {
+        return articleImageLink;
     }
 
     public String getArticleLink() {

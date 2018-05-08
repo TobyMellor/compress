@@ -6,10 +6,12 @@ import org.json.JSONObject;
 public class JSONGenreInput implements GenreInput {
     private String name;
     private String slug;
+    private String imageLink;
 
     public JSONGenreInput(JSONObject json) throws JSONException {
-        this.name = json.getString("name");
-        this.slug = json.getString("slug");
+        this.name      = json.getString("name");
+        this.slug      = json.getString("slug");
+        this.imageLink = json.getString("image_link");
     }
 
     @Override
@@ -20,5 +22,10 @@ public class JSONGenreInput implements GenreInput {
     @Override
     public String getSlug() {
         return slug;
+    }
+
+    @Override
+    public String getImageLink() {
+        return imageLink;
     }
 }

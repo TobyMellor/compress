@@ -4,4 +4,6 @@ public interface GenreInput {
     String getName();
 
     String getSlug();
+
+    String getImageLink();
 }

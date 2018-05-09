@@ -4,19 +4,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONArticleInput implements ArticleInput {
-    private final int id;
-    private final String title;
-    private final String authorSummary;
-    private final String shortSentenceSummary;
-    private final String longSentenceSummary;
-    private final String articleImageLink;
-    private final String articleLink;
-    private final String date;
-    private final String humanDate;
-    private final int newsOutletGenreId;
-    private final int authorId;
-    private final String authorName;
-    private final String authorImageLink;
+    protected int id;
+    protected String title;
+    protected String authorSummary;
+    protected String shortSentenceSummary;
+    protected String longSentenceSummary;
+    protected String articleImageLink;
+    protected String articleLink;
+    protected String date;
+    protected String humanDate;
+    protected int newsOutletGenreId;
+    protected int authorId;
+    protected String authorName;
+    protected String authorImageLink;
+
+    public JSONArticleInput() {}
 
     public JSONArticleInput(JSONObject json) throws JSONException {
         id                   = json.getInt("id");

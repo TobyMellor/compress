@@ -1,5 +1,6 @@
 package uk.co.tobymellor.compress;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,6 +20,7 @@ import uk.co.tobymellor.compress.models.articles.ArticleManager;
 import uk.co.tobymellor.compress.models.genres.GenreManager;
 import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenreManager;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutletManager;
+import uk.co.tobymellor.compress.models.read_later.ReadLaterManager;
 import uk.co.tobymellor.compress.views.DiscoverFragment;
 import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private static GenreManager genreManager;
     private static NewsOutletGenreManager newsOutletGenreManager;
     private static ArticleManager articleManager;
+    private static ReadLaterManager readLaterManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             genreManager           = new GenreManager();
             newsOutletGenreManager = new NewsOutletGenreManager();
             articleManager         = new ArticleManager();
+            readLaterManager       = new ReadLaterManager(getSharedPreferences(ReadLaterManager.PREFERENCES_FILE, Context.MODE_PRIVATE));
         } catch (InterruptedException | ExecutionException | JSONException | ReflectiveOperationException e) {
             e.printStackTrace();
         }
@@ -86,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static ArticleManager getArticleManager() {
         return articleManager;
+    }
+
+    public static ReadLaterManager getReadLaterManager() {
+        return readLaterManager;
     }
 
     /**

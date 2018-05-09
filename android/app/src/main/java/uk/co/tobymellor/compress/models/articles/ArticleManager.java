@@ -13,7 +13,7 @@ import uk.co.tobymellor.compress.JSONTask;
 import uk.co.tobymellor.compress.models.Manager;
 
 public class ArticleManager extends Manager {
-    private final static String ENDPOINT = "articles";
+    public final static String ENDPOINT = "articles";
 
     private HashSet<Article> articles = new HashSet<>();
 
@@ -40,7 +40,6 @@ public class ArticleManager extends Manager {
         return null;
     }
 
-    @Override
     public void add(Object article) {
         if (article instanceof Article) {
             articles.add((Article) article);

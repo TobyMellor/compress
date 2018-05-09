@@ -8,7 +8,9 @@ import android.widget.ListView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 
+import uk.co.tobymellor.compress.MainActivity;
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
 import uk.co.tobymellor.compress.models.authors.Author;
@@ -24,19 +26,18 @@ public class ReadLaterFragment {
     }
 
     public View getView() {
-        Date date = new Date();
+//        HashSet<Article> articlesHashSet = MainActivity.getReadLaterManager().getArticles();
+//
+//        Article[] articles = articlesHashSet.toArray(new Article[articlesHashSet.size()]);
+//
+//        ListView list = fragment.findViewById(R.id.list_cards);
+//
+//        list.setAdapter(
+//                new ArticleAdapter(fragment.getContext(), articles, list)
+//        );
+//
+//        return fragment;
 
-
-        final Article[] articles = {
-                //
-        };
-
-        ListView list = fragment.findViewById(R.id.list_cards);
-
-        list.setAdapter(
-                new ArticleAdapter(fragment.getContext(), articles, list)
-        );
-
-        return fragment;
+        return null;
     }
 }

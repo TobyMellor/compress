@@ -8,7 +8,7 @@ public class NewsOutlet extends Author {
     private final String imageLink;
 
     public NewsOutlet(NewsOutletInput input) {
-        super(input.getName(), input.getImageLink(), null);
+        super(-1, input.getName(), input.getImageLink(), null);
 
         this.name      = input.getName();
         this.slug      = input.getSlug();

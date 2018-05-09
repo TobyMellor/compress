@@ -29,7 +29,7 @@ public class Article extends Model {
         this.newsOutletGenre = MainActivity.getNewsOutletGenreManager().get(articleInput.getNewsOutletGenreId());
 
         if (articleInput.getAuthorId() != -1) {
-            this.author = new Author(articleInput.getAuthorName(), articleInput.getAuthorImageLink(), newsOutletGenre.getNewsOutlet());
+            this.author = new Author(articleInput.getAuthorId(), articleInput.getAuthorName(), articleInput.getAuthorImageLink(), newsOutletGenre.getNewsOutlet());
         } else {
             this.author = newsOutletGenre.getNewsOutlet();
         }

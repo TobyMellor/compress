@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 
 abstract public class Model {
-    private final static String MYSQL_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public final static String MYSQL_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Model.MYSQL_DATE_FORMAT, Locale.UK);
 

@@ -15,12 +15,9 @@ use App\NewsOutletGenre;
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
-
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('articles', 'ArticleController@index');
+    $router->get('read_later_articles', 'ReadLaterController@index');
 
     $router->get('news_outlet_genres', function() {
         return response()->json([

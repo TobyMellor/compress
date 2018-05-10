@@ -12,15 +12,6 @@ public class DiscoverCardView extends ComPressCardView {
     public DiscoverCardView(Context context, ViewGroup container, @NonNull Article article, ArticleAdapter adapterContainer) {
         super(context, container, article, adapterContainer, R.layout.card_discover);
 
-        initReadLaterListener(context, super.getView());
-    }
-
-    private void initReadLaterListener(Context context, View view) {
-        view.findViewById(R.id.image_button_toggle_read_later).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        initReadLaterListener(context, super.getView(), this,  true);
     }
 }

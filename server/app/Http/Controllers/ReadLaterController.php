@@ -23,8 +23,8 @@ class ReadLaterController extends Controller {
                            ->get();
 
         return response()->json([
-            'success'  => true,
-            'articles' => $articles
+            'success'             => true,
+            'read_later_articles' => $articles
         ]);
     }
 }

@@ -26,18 +26,24 @@ public class ReadLaterFragment {
     }
 
     public View getView() {
-//        HashSet<Article> articlesHashSet = MainActivity.getReadLaterManager().getArticles();
-//
-//        Article[] articles = articlesHashSet.toArray(new Article[articlesHashSet.size()]);
-//
-//        ListView list = fragment.findViewById(R.id.list_cards);
-//
-//        list.setAdapter(
-//                new ArticleAdapter(fragment.getContext(), articles, list)
-//        );
-//
-//        return fragment;
 
-        return null;
+        System.out.println("Testing");
+        HashSet<Article> articlesHashSet = MainActivity.getReadLaterManager().getReadLaterArticles();
+
+        System.out.println(articlesHashSet);
+        Article[] articles = articlesHashSet.toArray(new Article[articlesHashSet.size()]);
+
+        System.out.println(articlesHashSet);
+        ListView list = fragment.findViewById(R.id.list_cards);
+
+        list.setAdapter(
+                new ArticleAdapter(fragment.getContext(), articles, list)
+        );
+        System.out.println("test");
+        System.out.println(articles);
+
+        System.out.println(articlesHashSet);
+
+        return fragment;
     }
 }

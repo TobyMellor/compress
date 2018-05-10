@@ -100,6 +100,8 @@ public class Article extends Model {
     }
 
     private String replaceBreaks(String sentences) {
+        if (sentences == null) return sentences;
+
         return sentences.replace("[BREAK] ", "\n\n").replace("[BREAK]", "");
     }
 }

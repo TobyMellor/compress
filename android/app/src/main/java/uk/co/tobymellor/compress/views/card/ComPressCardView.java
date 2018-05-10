@@ -15,6 +15,10 @@ import uk.co.tobymellor.compress.models.authors.Author;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public abstract class ComPressCardView {
+    protected final View articleCardView;
+    protected final Article article;
+    protected final ArticleAdapter adapterContainer;
+
     private ImageView articleImage;
     private ImageView authorImage;
     private TextView title;
@@ -22,10 +26,11 @@ public abstract class ComPressCardView {
     private TextView authorCompany;
     private TextView authorName;
 
-    private View articleCardView;
+    ComPressCardView(final Context context, ViewGroup container, @NonNull Article article, ArticleAdapter adapterContainer, int layout) {
+        articleCardView       = LayoutInflater.from(context).inflate(layout, container, false);
 
-    ComPressCardView(final Context context, ViewGroup container, @NonNull Article article, int layout) {
-        articleCardView = LayoutInflater.from(context).inflate(layout, container, false);
+        this.article          = article;
+        this.adapterContainer = adapterContainer;
 
         articleImage  = articleCardView.findViewById(R.id.image_article);
         authorImage   = articleCardView.findViewById(R.id.image_author);

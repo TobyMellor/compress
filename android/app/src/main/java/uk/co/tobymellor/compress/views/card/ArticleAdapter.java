@@ -24,24 +24,33 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import uk.co.tobymellor.compress.DownloadImageTask;
+import uk.co.tobymellor.compress.MainActivity;
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public class ArticleAdapter extends ArrayAdapter<Article> {
     private final HashMap<Integer, View> cardViews = new HashMap<>();
-    private final Article[] articles;
+
+    private HashMap<Integer, Integer> idMap = new HashMap<>();
+    public ArrayList<Article> articles;
+
     private final ConstraintLayout fullArticle;
     private final FloatingActionButton floatingCloseButton;
+    private final Class<? extends ComPressCardView> compressCardViewClass;
 
     private Article currentArticle;
 
-    public ArticleAdapter(@NonNull Context context, Article[] articles, ViewGroup container) {
+    public ArticleAdapter(Context context, ArrayList<Article> articles, Class<? extends ComPressCardView> compressCardViewClass) {
         super(context, 0, articles);
 
         fullArticle = ((Activity) context).findViewById(R.id.constraint_full_article);
@@ -51,21 +60,54 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         initFullArticleListeners(context);
 
         this.articles = articles;
+        this.compressCardViewClass = compressCardViewClass;
+
+        for (int i = 0; i < articles.size(); i++) {
+            idMap.put(articles.get(i).getId(), i);
+        }
     }
 
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup container) {
-        if (convertView == null) {
-            Article article = articles[position];
+        if (convertView == null || getItemId(position) == -1) {
+            Article article = articles.get(position);
 
-            convertView = new DiscoverCardView(getContext(), container, article).getView();
+            try {
+                convertView = compressCardViewClass.getConstructor(Context.class, ViewGroup.class, Article.class, ArticleAdapter.class).newInstance(getContext(), container, article, this).getView();
 
-            cardViews.put(article.getId(), convertView);
+                cardViews.put(article.getId(), convertView);
 
-            initShowArticleListener(getContext(), (CardView) convertView.findViewById(R.id.card_view), article);
+                initShowArticleListener(getContext(), (CardView) convertView.findViewById(R.id.card_view), article);
+            } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
         }
 
         return convertView;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        Article article = getItem(position);
+
+        if (article == null) return -1;
+
+        return idMap.get(article.getId());
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    public void remove(Article articleToRemove) {
+        for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
+            Article article = it.next();
+
+            if (article.equals(articleToRemove)) it.remove();
+        }
+
+        this.notifyDataSetChanged();
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
@@ -15,7 +15,7 @@ import uk.co.tobymellor.compress.models.articles.Article;
 public class NewsOutletGenreManager extends Manager {
     private final static String ENDPOINT = "news_outlet_genres";
 
-    private HashSet<NewsOutletGenre> newsOutletGenres = new HashSet<>();
+    private ArrayList<NewsOutletGenre> newsOutletGenres = new ArrayList<>();
 
     public NewsOutletGenreManager() throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
         HashMap<String, String> params = new HashMap<>();
@@ -25,7 +25,7 @@ public class NewsOutletGenreManager extends Manager {
         super.populateFromJSON(this, NewsOutletGenre.class, JSONNewsOutletGenreInput.class, task.get());
     }
 
-    public HashSet<NewsOutletGenre> getNewsOutletGenres() {
+    public ArrayList<NewsOutletGenre> getNewsOutletGenres() {
         return newsOutletGenres;
     }
 

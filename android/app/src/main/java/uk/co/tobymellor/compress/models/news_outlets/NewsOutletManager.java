@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
@@ -16,7 +16,7 @@ import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenre;
 public class NewsOutletManager extends Manager {
     private final static String ENDPOINT = "news_outlets";
 
-    private HashSet<NewsOutlet> newsOutlets = new HashSet<>();
+    private ArrayList<NewsOutlet> newsOutlets = new ArrayList<>();
 
     public NewsOutletManager() throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
         HashMap<String, String> params = new HashMap<>();

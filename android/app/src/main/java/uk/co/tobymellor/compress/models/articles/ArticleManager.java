@@ -6,16 +6,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
+import uk.co.tobymellor.compress.MainActivity;
 import uk.co.tobymellor.compress.models.Manager;
 
 public class ArticleManager extends Manager {
     public final static String ENDPOINT = "articles";
 
-    private HashSet<Article> articles = new HashSet<>();
+    private ArrayList<Article> articles = new ArrayList<>();
 
     public ArticleManager() throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
         HashMap<String, String> params = new HashMap<>();
@@ -28,7 +29,15 @@ public class ArticleManager extends Manager {
         super.populateFromJSON(this, Article.class, JSONArticleInput.class, task.get());
     }
 
-    public HashSet<Article> getArticles() {
+    public ArrayList<Article> getArticles() {
+        ArrayList<Article> articles = new ArrayList<>(getCachedArticles());
+
+        articles.removeAll(MainActivity.getReadLaterManager().getReadLaterArticles());
+
+        return articles;
+    }
+
+    public ArrayList<Article> getCachedArticles() {
         return articles;
     }
 

@@ -8,7 +8,7 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -29,11 +29,7 @@ public class ReadLaterManager extends Manager {
     public ReadLaterManager(SharedPreferences sharedPreferences) throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
         this.sharedPreferences = sharedPreferences;
 
-        System.out.println(getReadLaterIdString());
-
         String uncachedArticleIds = getStringFromList(getUncachedArticleIds());
-
-        System.out.println(uncachedArticleIds);
 
         if (uncachedArticleIds.length() > 0) {
             HashMap<String, String> params = new HashMap<>();
@@ -42,20 +38,18 @@ public class ReadLaterManager extends Manager {
 
             AsyncTask<String, String, String> task = new JSONTask().execute(super.formUrl(ReadLaterManager.ENDPOINT, params));
 
-            super.populateFromJSON(MainActivity.getArticleManager(), Article.class, JSONArticleInput.class, task.get());
+            super.populateFromJSON(this, Article.class, JSONArticleInput.class, task.get());
         }
-
-        System.out.println(getReadLaterIdString());
     }
 
     private String getReadLaterIdString() {
         return sharedPreferences.getString(ReadLaterManager.PREFERENCE_ARTICLE_IDS, "");
     }
 
-    private HashSet<Integer> getUncachedArticleIds() {
-        HashSet<Integer> uncachedIds           = getListFromString(getReadLaterIdString());
-        HashSet<Article> cachedArticles        = MainActivity.getArticleManager().getArticles();
-        HashSet<Integer> cachedArticleIds      = new HashSet<>();
+    private ArrayList<Integer> getUncachedArticleIds() {
+        ArrayList<Integer> uncachedIds           = getListFromString(getReadLaterIdString());
+        ArrayList<Article> cachedArticles        = MainActivity.getArticleManager().getCachedArticles();
+        ArrayList<Integer> cachedArticleIds      = new ArrayList<>();
 
         for (Article cachedArticle : cachedArticles) cachedArticleIds.add(cachedArticle.getId());
 
@@ -64,9 +58,9 @@ public class ReadLaterManager extends Manager {
         return uncachedIds;
     }
 
-    public HashSet<Article> getReadLaterArticles() {
-        HashSet<Article> readLaterArticles = new HashSet<>();
-        HashSet<Article> articles          = MainActivity.getArticleManager().getArticles();
+    public ArrayList<Article> getReadLaterArticles() {
+        ArrayList<Article> readLaterArticles = new ArrayList<>();
+        ArrayList<Article> articles          = MainActivity.getArticleManager().getCachedArticles();
 
         for (int readLaterArticleId : getListFromString(getReadLaterIdString())) {
             for (Article article : articles) {
@@ -79,16 +73,16 @@ public class ReadLaterManager extends Manager {
         return readLaterArticles;
     }
 
-    private HashSet<Integer> getListFromString(String idString) {
+    private ArrayList<Integer> getListFromString(String idString) {
         List<String> idStringList = Arrays.asList(idString.split("\\s*,\\s*"));
-        HashSet<Integer> idList      = new HashSet<>();
+        ArrayList<Integer> idList      = new ArrayList<>();
 
         for (String id : idStringList) idList.add(Integer.valueOf(id));
 
         return idList;
     }
 
-    private String getStringFromList(HashSet<Integer> idList) {
+    private String getStringFromList(ArrayList<Integer> idList) {
         return TextUtils.join(",", idList);
     }
 
@@ -98,10 +92,14 @@ public class ReadLaterManager extends Manager {
             Article article = (Article) object;
             int articleId = article.getId();
 
+            if (MainActivity.getArticleManager().get(articleId) == null) {
+                MainActivity.getArticleManager().add(article);
+            }
+
             if (!getListFromString(getReadLaterIdString()).contains(articleId)) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                HashSet<Integer> readLaterIdList = getListFromString(getReadLaterIdString());
+                ArrayList<Integer> readLaterIdList = getListFromString(getReadLaterIdString());
                 readLaterIdList.add(articleId);
 
                 editor.putString(PREFERENCE_ARTICLE_IDS, getStringFromList(readLaterIdList));

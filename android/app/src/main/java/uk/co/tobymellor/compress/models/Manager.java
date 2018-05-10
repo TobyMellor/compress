@@ -43,9 +43,6 @@ abstract public class Manager {
     ) throws JSONException, ReflectiveOperationException {
         JSONObject jsonObject = new JSONObject(json); // TODO: Deal with this asynchronously instead of calling .get
 
-        System.out.println(jsonObject);
-        System.out.println(manager.getEndpoint());
-
         JSONArray jsonElements = jsonObject.getJSONArray(manager.getEndpoint());
 
         for (int i = 0; i < jsonElements.length(); i++) {

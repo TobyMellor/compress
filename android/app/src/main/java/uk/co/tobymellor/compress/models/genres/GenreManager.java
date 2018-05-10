@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
@@ -15,7 +15,7 @@ import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 public class GenreManager extends Manager {
     private final static String ENDPOINT = "genres";
 
-    private HashSet<Genre> genres = new HashSet<>();
+    private ArrayList<Genre> genres = new ArrayList<>();
 
     public GenreManager() throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
         HashMap<String, String> params = new HashMap<>();

@@ -1,6 +1,7 @@
 package uk.co.tobymellor.compress;
 
 import android.content.Context;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,11 +27,11 @@ import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private static NewsOutletManager newsOutletManager;
-    private static GenreManager genreManager;
-    private static NewsOutletGenreManager newsOutletGenreManager;
-    private static ArticleManager articleManager;
-    private static ReadLaterManager readLaterManager;
+    private static NewsOutletManager newsOutletManager = null;
+    private static GenreManager genreManager = null;
+    private static NewsOutletGenreManager newsOutletGenreManager = null;
+    private static ArticleManager articleManager = null;
+    private static ReadLaterManager readLaterManager = null;
 
     private static ReadLaterFragment readLaterFragment = null;
     private static DiscoverFragment discoverFragment   = null;
@@ -55,14 +56,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        try {
-            newsOutletManager      = new NewsOutletManager();
-            genreManager           = new GenreManager();
-            newsOutletGenreManager = new NewsOutletGenreManager();
-            articleManager         = new ArticleManager();
-            readLaterManager       = new ReadLaterManager(getSharedPreferences(ReadLaterManager.PREFERENCES_FILE, Context.MODE_PRIVATE));
-        } catch (InterruptedException | ExecutionException | JSONException | ReflectiveOperationException e) {
-            e.printStackTrace();
+        if (articleManager == null) {
+            try {
+                newsOutletManager      = new NewsOutletManager();
+                genreManager           = new GenreManager();
+                newsOutletGenreManager = new NewsOutletGenreManager();
+                articleManager         = new ArticleManager();
+                readLaterManager       = new ReadLaterManager(getSharedPreferences(ReadLaterManager.PREFERENCES_FILE, Context.MODE_PRIVATE));
+            } catch (InterruptedException | ExecutionException | JSONException | ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
         }
 
         // Create the adapter that will return a fragment for each of the three
@@ -77,7 +80,20 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        mViewPager.setCurrentItem(1);
+        System.out.println(savedInstanceState);
+        mViewPager.setCurrentItem(savedInstanceState != null ? savedInstanceState.getInt("current_item") : 1);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("current_item", 2);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     public static NewsOutletManager getNewsOutletManager() {
@@ -147,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
                     return discoverFragment.getView();
                 case 3:
-                    return new SettingsFragment(inflater, container).getView();
+                    return new SettingsFragment(inflater, container, (MainActivity) inflater.getContext()).getView();
             }
 
             return null;

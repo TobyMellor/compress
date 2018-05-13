@@ -1,0 +1,22 @@
+{
+  "name": "compress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.mix.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "cross-env": "^5.1.5",
+    "laravel-mix": "^2.1.11"
+  },
+  "scripts": {
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Toby Mellor",
+  "license": "ISC"
+}

@@ -15,6 +15,10 @@ use App\NewsOutletGenre;
 |
 */
 
+$router->get('/', function() {
+    return view('user-guide');
+});
+
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('articles', 'ArticleController@index');
     $router->get('read_later_articles', 'ReadLaterController@index');

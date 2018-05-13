@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+
+$black: rgba(0, 0, 0, .87);
+$white: rgba(255, 255, 255, .95);
+$grey: rgba(0, 0, 0, .6);
+$blue: #26c6da;
+$blue-dark: #0095a8;
+$green: #1abc9c;
+$highlight: #fce48a;
+
+$margin-sm: 8px;
+$margin-md: 12px;
+$margin-lg: 18px;
+$margin-xl: 32px;
+
+* {
+    font-family: 'Roboto', sans-serif;
+    color: $black;
+}
+
+body {
+    margin: 0;
+}
+
+.navbar {
+    .main-navbar {
+        background-color: $grey;
+        color: $white;
+        font-size: 1.4em;
+        font-weight: 500;
+        padding: $margin-sm;
+        padding-left: 40px;
+        position: sticky;
+        top: 0;
+        box-shadow: 0px 0px 5px 0px $black;
+        cursor: pointer;
+
+        i {
+            color: $white;
+            position: absolute;
+            top: 9px;
+            right: 40px;
+            font-size: 1em;
+        }
+    }
+
+    ul {
+        margin: 0;
+        display: none;
+        padding: 0 20px;
+        list-style: none;
+
+        li {
+            padding: $margin-sm 20px;
+            display: block;
+        }
+    }
+
+    &.expanded {
+        .main-navbar {
+            background-color: $black;
+        }
+
+        ul {
+            display: block;
+        }
+    }
+}
+
+.container {
+    padding: $margin-lg;
+
+    .text-section, .image-section {
+        margin-bottom: $margin-lg;
+    }
+
+    .text-section {
+        display: table;
+
+        &:nth-child(3n + 1) {
+            .emphasis {
+                background-color: $blue;
+            }
+
+            .details a {
+                color: $blue;
+            }
+        }
+
+        &:nth-child(3n + 2) {
+            .emphasis {
+                background-color: $blue-dark;
+            }
+
+            .details a {
+                color: $blue-dark;
+            }
+        }
+
+        &:nth-child(3n) {
+            .emphasis {
+                background-color: $green;
+            }
+
+            .details a {
+                color: $green;
+            }
+        }
+
+        .emphasis {
+            display: table-cell;
+            width: 4px;
+            border-radius: 4px;
+        }
+
+        .details {
+            margin-left: $margin-lg;
+            margin-right: $margin-lg;
+
+            h1 {
+                margin: 0;
+                margin-bottom: $margin-md;
+                line-height: 34px;
+            }
+    
+            p {
+                color: $grey;
+                margin: 0;
+                margin-bottom: $margin-lg;
+
+                &.long-summary {
+                    display: none;
+                    color: $highlight;
+                    transition: color .5s;
+
+                    &.expanded {
+                        color: $grey;
+                    }
+                }
+            }
+
+            .read-more {
+                font-weight: 500;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .image-section {
+        margin-left: -$margin-lg;
+        margin-right: -$margin-lg;
+
+        img {
+            width: 100%;
+        }
+    }
+}

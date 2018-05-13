@@ -31,6 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import uk.co.tobymellor.compress.DownloadImageTask;
 import uk.co.tobymellor.compress.MainActivity;
@@ -100,14 +101,36 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         return true;
     }
 
-    public void remove(Article articleToRemove) {
+    @Override
+    public void add(Article article) {
+        super.add(article);
+
+        idMap.put(article.getId(), articles.size());
+
+        this.notifyDataSetChanged();
+    }
+
+    public void remove(ComPressCardView articleViewToRemove) {
+        Article articleToRemove = articleViewToRemove.article;
+
         for (Iterator<Article> it = articles.iterator(); it.hasNext(); ) {
             Article article = it.next();
 
-            if (article.equals(articleToRemove)) it.remove();
+            if (article.equals(articleToRemove)) {
+                idMap.remove(article.getId());
+                it.remove();
+                break;
+            }
         }
 
+
         this.notifyDataSetChanged();
+
+        ViewGroup.LayoutParams layoutParams = articleViewToRemove.articleCardView.getLayoutParams();
+        layoutParams.height = cardViews.get(articleToRemove.getId()).getLayoutParams().height;
+
+        articleViewToRemove.articleCardView.setLayoutParams(layoutParams);
+        articleViewToRemove.articleCardView.setTranslationX(0);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -259,7 +282,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         });
 
         initExternalArticleListener(context, fullArticle.findViewById(R.id.text_title));
-        initExternalArticleListener(context, fullArticle.findViewById(R.id.text_read_full_article));
     }
 
     private void initExternalArticleListener(final Context context, final View view) {
@@ -306,8 +328,14 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         textAuthorDetails.setText(article.getAuthorSignature());
         textSummary.setText(article.getShortSentenceSummary() != null ? article.getShortSentenceSummary() : article.getAuthorSummary());
 
+        if (article.getShortSentenceSummary() != null) {
+            textReadMore.setVisibility(View.VISIBLE);
+            textReadFullArticle.setVisibility(View.INVISIBLE);
+        } else {
+            textReadMore.setVisibility(View.INVISIBLE);
+            textReadFullArticle.setVisibility(View.VISIBLE);
+        }
 
-        textReadMore.setVisibility(View.VISIBLE);
-        textReadFullArticle.setVisibility(View.INVISIBLE);
+        initExternalArticleListener(fullArticle.getContext(), fullArticle.findViewById(R.id.text_read_full_article));
     }
 }

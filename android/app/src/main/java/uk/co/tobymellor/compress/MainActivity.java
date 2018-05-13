@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private static ArticleManager articleManager;
     private static ReadLaterManager readLaterManager;
 
+    private static ReadLaterFragment readLaterFragment = null;
+    private static DiscoverFragment discoverFragment   = null;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -97,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
         return readLaterManager;
     }
 
+    public static ReadLaterFragment getReadLaterFragment() {
+        return readLaterFragment;
+    }
+
+    public static DiscoverFragment getDiscoverFragment() {
+        return discoverFragment;
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -128,9 +139,13 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             switch(getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
-                    return new ReadLaterFragment(inflater, container).getView();
+                    readLaterFragment = new ReadLaterFragment(inflater, container);
+
+                    return readLaterFragment.getView();
                 case 2:
-                    return new DiscoverFragment(inflater, container).getView();
+                    discoverFragment = new DiscoverFragment(inflater, container);
+
+                    return discoverFragment.getView();
                 case 3:
                     return new SettingsFragment(inflater, container).getView();
             }

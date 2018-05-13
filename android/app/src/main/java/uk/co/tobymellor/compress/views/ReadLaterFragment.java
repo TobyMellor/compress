@@ -3,6 +3,7 @@ package uk.co.tobymellor.compress.views;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ListView;
 
 import java.text.ParseException;
@@ -20,19 +21,16 @@ import uk.co.tobymellor.compress.views.card.ArticleAdapter;
 import uk.co.tobymellor.compress.views.card.DiscoverCardView;
 import uk.co.tobymellor.compress.views.card.ReadLaterCardView;
 
-public class ReadLaterFragment {
-    private View fragment;
-
+public class ReadLaterFragment extends ComPressFragment {
     public ReadLaterFragment(LayoutInflater inflater, ViewGroup container) {
         fragment = inflater.inflate(R.layout.fragment_articles, container, false);
+        adapter  = new ArticleAdapter(fragment.getContext(), MainActivity.getReadLaterManager().getReadLaterArticles(), ReadLaterCardView.class);
     }
 
     public View getView() {
         ListView list = fragment.findViewById(R.id.list_cards);
 
-        list.setAdapter(
-                new ArticleAdapter(fragment.getContext(), MainActivity.getReadLaterManager().getReadLaterArticles(), ReadLaterCardView.class)
-        );
+        list.setAdapter(adapter);
 
         return fragment;
     }

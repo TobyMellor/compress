@@ -16,7 +16,6 @@ import uk.co.tobymellor.compress.JSONTask;
 import uk.co.tobymellor.compress.MainActivity;
 import uk.co.tobymellor.compress.models.Manager;
 import uk.co.tobymellor.compress.models.articles.Article;
-import uk.co.tobymellor.compress.models.articles.ArticleManager;
 import uk.co.tobymellor.compress.models.articles.JSONArticleInput;
 
 public class ReadLaterManager extends Manager {
@@ -47,9 +46,9 @@ public class ReadLaterManager extends Manager {
     }
 
     private ArrayList<Integer> getUncachedArticleIds() {
-        ArrayList<Integer> uncachedIds           = getListFromString(getReadLaterIdString());
-        ArrayList<Article> cachedArticles        = MainActivity.getArticleManager().getCachedArticles();
-        ArrayList<Integer> cachedArticleIds      = new ArrayList<>();
+        ArrayList<Integer> uncachedIds      = getListFromString(getReadLaterIdString());
+        ArrayList<Article> cachedArticles   = MainActivity.getArticleManager().getCachedArticles();
+        ArrayList<Integer> cachedArticleIds = new ArrayList<>();
 
         for (Article cachedArticle : cachedArticles) cachedArticleIds.add(cachedArticle.getId());
 
@@ -74,8 +73,11 @@ public class ReadLaterManager extends Manager {
     }
 
     private ArrayList<Integer> getListFromString(String idString) {
+        ArrayList<Integer> idList = new ArrayList<>();
+
+        if (idString == "") return idList;
+
         List<String> idStringList = Arrays.asList(idString.split("\\s*,\\s*"));
-        ArrayList<Integer> idList      = new ArrayList<>();
 
         for (String id : idStringList) idList.add(Integer.valueOf(id));
 
@@ -90,7 +92,11 @@ public class ReadLaterManager extends Manager {
     public void add(Object object) {
         if (object instanceof Article) {
             Article article = (Article) object;
-            int articleId = article.getId();
+            int articleId   = article.getId();
+
+            if (MainActivity.getReadLaterFragment() != null) {
+                MainActivity.getReadLaterFragment().getArticleAdapter().add(article);
+            }
 
             if (MainActivity.getArticleManager().get(articleId) == null) {
                 MainActivity.getArticleManager().add(article);
@@ -110,7 +116,25 @@ public class ReadLaterManager extends Manager {
 
     @Override
     public void remove(Object object) {
-        //
+        if (object instanceof Article) {
+            Article article = (Article) object;
+            int articleId   = article.getId();
+
+            if (MainActivity.getReadLaterFragment() != null) {
+                MainActivity.getDiscoverFragment().getArticleAdapter().add(article);
+            }
+
+            if (getListFromString(getReadLaterIdString()).contains(articleId)) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                ArrayList<Integer> readLaterIdList = getListFromString(getReadLaterIdString());
+                readLaterIdList.remove(Integer.valueOf(articleId)); // wrapped in Integer.valueOf() to remove the Integer, not remove by index
+
+
+                editor.putString(PREFERENCE_ARTICLE_IDS, getStringFromList(readLaterIdList));
+                editor.apply();
+            }
+        }
     }
 
     @Override

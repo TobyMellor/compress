@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import uk.co.tobymellor.compress.DownloadImageTask;
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
@@ -48,17 +52,17 @@ public abstract class ComPressCardView {
         populate(article);
     }
 
-    protected void initReadLaterListener(final Context context, final View view, final ComPressCardView cardView, final Boolean shouldMoveLeft) {
-        view.findViewById(R.id.image_button_toggle_read_later).setOnClickListener(new View.OnClickListener() {
+    protected void initReadLaterListener(MultiOnClickListener multiOnClickListener, final View view, final ComPressCardView cardView, final Boolean shouldMoveLeft) {
+        multiOnClickListener.addOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View v) {
+            public void onClick(View v) {
                 final View card = cardView.articleCardView;
 
                 DisplayMetrics displayMetrics = new DisplayMetrics();
 
-                ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                ((Activity) v.getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-                ObjectAnimator leftAnimation = ObjectAnimator.ofFloat(card, "x", 0, shouldMoveLeft ? -displayMetrics.widthPixels : displayMetrics.widthPixels);
+                ObjectAnimator leftAnimation = ObjectAnimator.ofFloat(card, "x", 0, 100/*shouldMoveLeft ? -displayMetrics.widthPixels : displayMetrics.widthPixels*/);
 
                 leftAnimation.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -84,7 +88,7 @@ public abstract class ComPressCardView {
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
 
-                                cardView.adapterContainer.remove(cardView.article);
+                                cardView.adapterContainer.remove(cardView);
                             }
                         });
 
@@ -97,6 +101,8 @@ public abstract class ComPressCardView {
                 leftAnimation.start();
             }
         });
+
+        view.findViewById(R.id.image_button_toggle_read_later).setOnClickListener(multiOnClickListener);
     }
 
     private void populate(Article article) {
@@ -112,5 +118,24 @@ public abstract class ComPressCardView {
 
     public View getView() {
         return articleCardView;
+    }
+
+    protected final class MultiOnClickListener implements View.OnClickListener {
+        List<View.OnClickListener> listeners;
+
+        public MultiOnClickListener() {
+            listeners = new ArrayList<View.OnClickListener>();
+        }
+
+        public void addOnClickListener(View.OnClickListener listener) {
+            listeners.add(listener);
+        }
+
+        @Override
+        public void onClick(View v) {
+            for (View.OnClickListener listener : listeners) {
+                listener.onClick(v);
+            }
+        }
     }
 }

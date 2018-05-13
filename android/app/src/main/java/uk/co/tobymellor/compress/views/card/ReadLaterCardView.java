@@ -24,6 +24,21 @@ public class ReadLaterCardView extends ComPressCardView {
     public ReadLaterCardView(Context context, ViewGroup container, @NonNull Article article, ArticleAdapter adapterContainer) {
         super(context, container, article, adapterContainer, R.layout.card_read_later);
 
-        initReadLaterListener(context, super.getView(), this,  false);
+        initReadLaterListener(super.getView(), this,  false);
+    }
+
+    protected void initReadLaterListener(final View view, final ComPressCardView cardView, final Boolean shouldMoveLeft) {
+        final Article article = super.article;
+
+        MultiOnClickListener multiOnClickListener = new MultiOnClickListener();
+
+        multiOnClickListener.addOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.getReadLaterManager().remove(article);
+            }
+        });
+
+        super.initReadLaterListener(multiOnClickListener, view, cardView, shouldMoveLeft);
     }
 }

@@ -2,7 +2,12 @@
 
 namespace App\Jobs;
 
-use Log;
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use FCM;
+
+use App\FirebaseToken;
 
 class MessageJob extends Job
 {
@@ -23,6 +28,35 @@ class MessageJob extends Job
      */
     public function handle()
     {
-        Log::info('job called');
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60*20);
+
+        $notificationBuilder = new PayloadNotificationBuilder('my title');
+        $notificationBuilder->setBody('Hello world')
+                            ->setSound('default');
+
+        $dataBuilder = new PayloadDataBuilder();
+        $dataBuilder->addData(['a_data' => 'my_data']);
+
+        $option = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data = $dataBuilder->build();
+
+        // You must change it to get your tokens
+        $tokens = FirebaseToken::pluck('token')->toArray();
+
+        $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
+
+        //return Array - you must remove all this tokens in your database
+        var_dump($downstreamResponse->tokensToDelete());
+
+        //return Array (key : oldToken, value : new token - you must change the token in your database )
+        var_dump($downstreamResponse->tokensToModify());
+
+        //return Array - you should try to resend the message to the tokens in the array
+        var_dump($downstreamResponse->tokensToRetry());
+
+        // return Array (key:token, value:errror) - in production you should remove from your database the tokens present in this array
+        var_dump($downstreamResponse->tokensWithError());
     }
 }

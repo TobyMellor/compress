@@ -28,6 +28,7 @@ import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenreManage
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutletManager;
 import uk.co.tobymellor.compress.models.read_later.ReadLaterManager;
 import uk.co.tobymellor.compress.notifications.FirebaseInstanceIDService;
+import uk.co.tobymellor.compress.notifications.FirebaseMessagingService;
 import uk.co.tobymellor.compress.views.DiscoverFragment;
 import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FirebaseApp.initializeApp(this);
-        FirebaseMessaging.getInstance().subscribeToTopic("test");
+        FirebaseMessaging.getInstance().subscribeToTopic(FirebaseMessagingService.SUBSCRIBED_TOPIC);
         FirebaseInstanceId.getInstance().getToken();
 
         if (articleManager == null) {

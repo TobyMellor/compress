@@ -19,4 +19,9 @@
     <string name="read_short_sentence_summary">Read More</string>
     <string name="read_long_sentence_summary">Read Even More</string>
     <string name="read_full_article">Read Full Article</string>
+
+    <!--Notifications-->
+    <string name="channel_id">compress_notifications</string>
+    <string name="channel_name">ComPress Notifications</string>
+    <string name="channel_description">Enable your notifications to receive live news updates from News Outlets and Genres that interest you!</string>
 </resources>

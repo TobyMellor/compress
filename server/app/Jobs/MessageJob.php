@@ -31,12 +31,14 @@ class MessageJob extends Job
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
 
-        $notificationBuilder = new PayloadNotificationBuilder('my title');
-        $notificationBuilder->setBody('Hello world')
+        $randomArticle = NewsArticle::inRandomOrder()->first();
+
+        $notificationBuilder = new PayloadNotificationBuilder('BREAKING NEWS: ' . $randomArticle->title);
+        $notificationBuilder->setBody($randomArticle->author_summary)
                             ->setSound('default');
 
         $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData(['a_data' => 'my_data']);
+        $dataBuilder->addData(['article_link' => $randomArticle->article_link]);
 
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();

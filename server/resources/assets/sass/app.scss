@@ -170,20 +170,23 @@ body {
                 color: $grey;
                 margin: 0;
                 margin-bottom: $margin-lg;
+            }
 
-                &.long-summary {
-                    display: none;
+            .long-summary {
+                display: none;
+
+                p {
                     color: $highlight;
                     transition: color .5s;
+                }
 
-                    &.expanded {
-                        color: $grey;
-                    }
+                &.expanded p {
+                    color: $grey;
+                }
 
-                    img {
-                        width: 100%;
-                        margin-top: 25px;
-                    }
+                img {
+                    width: 100%;
+                    margin-bottom: $margin-md;
                 }
             }
 
@@ -234,7 +237,7 @@ span.android-button {
 
     &.loaded {
         background: none;
-        
+
         img {
             width: 100%;
         }

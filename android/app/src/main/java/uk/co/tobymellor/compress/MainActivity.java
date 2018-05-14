@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private static ReadLaterFragment readLaterFragment = null;
     private static DiscoverFragment discoverFragment   = null;
 
+    public final static String BASE_URL = "http://46.101.28.103/";
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a

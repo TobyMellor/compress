@@ -8,8 +8,10 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.tobymellor.compress.MainActivity;
+
 abstract public class Manager {
-    private final static String BASE_URL = "http://46.101.28.103/api";
+    private final static String BASE_URL = MainActivity.BASE_URL + "api";
 
     public abstract void add(Object object);
 

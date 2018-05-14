@@ -43,4 +43,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             'genres'  => Genre::all()
         ]);
     });
+
+    $router->post('testing', 'FirebaseController@store_token');
 });

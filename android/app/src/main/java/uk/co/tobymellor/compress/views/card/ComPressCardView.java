@@ -62,7 +62,7 @@ public abstract class ComPressCardView {
 
                 ((Activity) v.getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-                ObjectAnimator leftAnimation = ObjectAnimator.ofFloat(card, "x", 0, 100/*shouldMoveLeft ? -displayMetrics.widthPixels : displayMetrics.widthPixels*/);
+                ObjectAnimator leftAnimation = ObjectAnimator.ofFloat(card, "x", 0, shouldMoveLeft ? -displayMetrics.widthPixels : displayMetrics.widthPixels);
 
                 leftAnimation.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -106,6 +106,7 @@ public abstract class ComPressCardView {
     }
 
     private void populate(Article article) {
+        System.out.println(article);
         new DownloadImageTask(articleImage).execute(article.getArticleImageLink());
         new DownloadImageTask(authorImage).execute(article.getAuthor().getImageLink());
 

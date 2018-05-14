@@ -60,7 +60,7 @@ $(function() {
 
     $('.image-wrapper').each(function() {
         const $imageWrapper = $(this),
-                $image        = $imageWrapper.find('img');
+              $image        = $imageWrapper.find('img');
 
         const $fakeImage =
             $('<img>').attr('src', $image.data('src'))

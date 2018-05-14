@@ -123,7 +123,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             }
         }
 
-
         this.notifyDataSetChanged();
 
         ViewGroup.LayoutParams layoutParams = articleViewToRemove.articleCardView.getLayoutParams();

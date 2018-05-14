@@ -11,7 +11,7 @@ import java.util.Map;
 import uk.co.tobymellor.compress.MainActivity;
 
 abstract public class Manager {
-    private final static String BASE_URL = MainActivity.BASE_URL + "api";
+    public final static String BASE_URL = MainActivity.BASE_URL + "api";
 
     public abstract void add(Object object);
 

@@ -5,6 +5,9 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
+use Illuminate\Support\Facades\Queue;
+use App\Jobs\MessageJob;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -24,6 +27,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->call(function() {
+            Queue::push(new MessageJob());
+        })->everyMinute();
     }
 }

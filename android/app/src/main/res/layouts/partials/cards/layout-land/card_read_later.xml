@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/card_discover_header" />
+            <include layout="@layout/card_read_later_header" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"

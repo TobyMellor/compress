@@ -32,7 +32,7 @@ class MessageJob extends Job
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
 
-        $randomArticle = NewsArticle::inRandomOrder()->first();
+        $randomArticle = Article::inRandomOrder()->first();
 
         $notificationBuilder = new PayloadNotificationBuilder('BREAKING NEWS: ' . $randomArticle->title);
         $notificationBuilder->setBody($randomArticle->author_summary)

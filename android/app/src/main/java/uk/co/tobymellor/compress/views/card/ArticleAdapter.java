@@ -280,6 +280,19 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             }
         });
 
+        fullArticle.findViewById(R.id.constraint_share_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+
+                intent.setType("text/plane");
+                intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_subject));
+                intent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_body_end));
+
+                context.startActivity(Intent.createChooser(intent, "Share using"));
+            }
+        });
+
         initExternalArticleListener(context, fullArticle.findViewById(R.id.text_title));
     }
 

@@ -24,4 +24,8 @@
     <string name="channel_id">compress_notifications</string>
     <string name="channel_name">ComPress Notifications</string>
     <string name="channel_description">Enable your notifications to receive live news updates from News Outlets and Genres that interest you!</string>
+
+    <!--Sharing-->
+    <string name="share_subject">You need to check out this article</string>
+    <string name="share_body_end"> – This was shared through the ComPress app.</string>
 </resources>

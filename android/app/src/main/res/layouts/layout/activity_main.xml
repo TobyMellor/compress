@@ -147,12 +147,43 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="@string/read_full_article"
+                        android:text=
+                            "@string/read_full_article"
                         android:textAllCaps="true"
                         android:textColor="@color/colorAccent"
                         android:visibility="invisible"
                         app:fontFamily="@font/roboto_medium"
                         app:layout_constraintTop_toBottomOf="@+id/text_summary" />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/constraint_share_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/text_read_full_article"
+                        app:layout_constraintBottom_toBottomOf="@id/text_read_full_article"
+                        app:layout_constraintRight_toRightOf="parent">
+
+                        <TextView
+                            android:id="@+id/text_share"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Share:"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toTopOf="@id/image_button_share_article"
+                            app:layout_constraintBottom_toBottomOf="@id/image_button_share_article" />
+
+                        <ImageButton
+                            android:id="@+id/image_button_share_article"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:src="@drawable/ic_share_black_24dp"
+                            android:background="@color/colorBackground"
+                            app:layout_constraintLeft_toRightOf="@id/text_share"
+                            app:layout_constraintRight_toRightOf="parent" />
+
+                    </android.support.constraint.ConstraintLayout>
 
                 </android.support.constraint.ConstraintLayout>
 

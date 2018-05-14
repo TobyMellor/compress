@@ -8,11 +8,11 @@ use App\FirebaseToken;
 
 class FirebaseController extends Controller {
     public function store_token(Request $request) {
-        $token = new Token([
+        $firebaseToken = new FirebaseToken([
             'token' => $request->input('token')
         ]);
 
-        $token->save();
+        $firebaseToken->save();
 
         return response()->json([
             'success' => true,

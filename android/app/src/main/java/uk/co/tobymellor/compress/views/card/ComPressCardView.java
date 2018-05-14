@@ -106,7 +106,6 @@ public abstract class ComPressCardView {
     }
 
     private void populate(Article article) {
-        System.out.println(article);
         new DownloadImageTask(articleImage).execute(article.getArticleImageLink());
         new DownloadImageTask(authorImage).execute(article.getAuthor().getImageLink());
 

@@ -10,11 +10,12 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import uk.co.tobymellor.compress.JSONTask;
-import uk.co.tobymellor.compress.MainActivity;
 import uk.co.tobymellor.compress.models.Manager;
 
 public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
+    private final static String ENDPOINT = "/send-firebase-token";
+    private final static String TOKEN_PARAM = "token";
+
     @Override
     public void onTokenRefresh() {
         String token = FirebaseInstanceId.getInstance().getToken();
@@ -22,12 +23,12 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody
                 .Builder()
-                .add("token", token)
+                .add(TOKEN_PARAM, token)
                 .build();
 
         Request request = new Request
                 .Builder()
-                .url(Manager.BASE_URL + "/testing")
+                .url(Manager.BASE_URL + ENDPOINT)
                 .post(body)
                 .build();
 

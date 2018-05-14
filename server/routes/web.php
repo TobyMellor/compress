@@ -44,5 +44,5 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         ]);
     });
 
-    $router->post('testing', 'FirebaseController@store_token');
+    $router->post('store-firebase-token', 'FirebaseController@store_token');
 });

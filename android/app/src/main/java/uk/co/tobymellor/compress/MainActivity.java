@@ -13,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.models.articles.ArticleManager;
@@ -25,6 +27,7 @@ import uk.co.tobymellor.compress.models.genres.GenreManager;
 import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenreManager;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutletManager;
 import uk.co.tobymellor.compress.models.read_later.ReadLaterManager;
+import uk.co.tobymellor.compress.notifications.FirebaseInstanceIDService;
 import uk.co.tobymellor.compress.views.DiscoverFragment;
 import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseApp.initializeApp(this);
         FirebaseMessaging.getInstance().subscribeToTopic("test");
         FirebaseInstanceId.getInstance().getToken();
 
@@ -88,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        System.out.println(savedInstanceState);
         mViewPager.setCurrentItem(savedInstanceState != null ? savedInstanceState.getInt("current_item") : 1);
     }
 

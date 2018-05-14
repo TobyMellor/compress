@@ -29,14 +29,14 @@
             android:theme="@style/AppThemeEmbeddedActivity" />
 
         <service
-            android:name=".FirebaseMessagingService">
+            android:name=".notifications.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <service
-            android:name=".FirebaseInstanceIDService">
+            android:name=".notifications.FirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

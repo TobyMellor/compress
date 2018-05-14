@@ -7,6 +7,9 @@ $blue: #26c6da;
 $blue-dark: #0095a8;
 $green: #1abc9c;
 $highlight: #fce48a;
+$cloudy-white: #ecf0f1;
+$silver: #bdc3c7;
+
 
 $margin-sm: 8px;
 $margin-md: 12px;
@@ -23,46 +26,86 @@ body {
 }
 
 .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
     .main-navbar {
         background-color: $grey;
-        color: $white;
-        font-size: 1.4em;
-        font-weight: 500;
         padding: $margin-sm;
         padding-left: 40px;
-        position: sticky;
-        top: 0;
         box-shadow: 0px 0px 5px 0px $black;
         cursor: pointer;
+        transition: .25s background-color;
+
+        span {
+            color: $white;
+            font-size: 1.4em;
+            font-weight: 500;
+        }
 
         i {
             color: $white;
             position: absolute;
             top: 9px;
             right: 40px;
-            font-size: 1em;
+            font-size: 1.4em;
+            transition: .25s transform;
         }
     }
 
     ul {
         margin: 0;
         display: none;
-        padding: 0 20px;
+        padding: 5px 20px 0 20px;
         list-style: none;
+        background-color: $black;
+        border-bottom: 2px solid $grey;
+        box-shadow: 0px 0px 5px 0px $black;
 
         li {
             padding: $margin-sm 20px;
             display: block;
+            color: $white;
+            border-bottom: 1px solid $white;
+            cursor: pointer;
+            font-weight: 500;
+            
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &.active:after {
+                font-family: FontAwesome;
+                content: "\f053";
+                color: $blue;
+                margin-left: $margin-sm;
+                position: relative;
+                top: 1px;
+            }
+
+            &:nth-child(3n + 1).active:after {
+                color: $blue;
+            }
+    
+            &:nth-child(3n + 2).active:after {
+                color: $blue-dark;
+            }
+    
+            &:nth-child(3n).active:after {
+                color: $green;
+            }
         }
     }
 
     &.expanded {
         .main-navbar {
             background-color: $black;
-        }
 
-        ul {
-            display: block;
+            i {
+                transform: rotate(180deg);
+                top: 11px;
+            }
         }
     }
 }
@@ -136,6 +179,11 @@ body {
                     &.expanded {
                         color: $grey;
                     }
+
+                    img {
+                        width: 100%;
+                        margin-top: 25px;
+                    }
                 }
             }
 
@@ -150,6 +198,43 @@ body {
         margin-left: -$margin-lg;
         margin-right: -$margin-lg;
 
+        &.logo {
+            margin: 0;
+            margin-top: 28px;
+        }
+    }
+}
+
+span.android-button {
+    color: $blue-dark;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+@keyframes image-placeholder-animation {
+    0% {
+        background-position: -500px 0
+    }
+
+    100% {
+        background-position: 500px 0
+    }
+}
+
+.image-wrapper {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: image-placeholder-animation;
+    animation-timing-function: linear;
+    background: $cloudy-white;
+    background: linear-gradient(to right, $cloudy-white 8%, $silver 18%, $cloudy-white 33%);
+    background-size: 1000px 104px;
+    position: relative;
+
+    &.loaded {
+        background: none;
+        
         img {
             width: 100%;
         }

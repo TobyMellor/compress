@@ -8,7 +8,7 @@ use LaravelFCM\Message\PayloadNotificationBuilder;
 use FCM;
 
 use App\FirebaseToken;
-use App\NewsArticle;
+use App\Article;
 
 class MessageJob extends Job
 {

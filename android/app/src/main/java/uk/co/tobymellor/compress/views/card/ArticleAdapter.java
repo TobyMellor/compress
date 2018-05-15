@@ -42,7 +42,7 @@ import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 public class ArticleAdapter extends ArrayAdapter<Article> {
     private final HashMap<Integer, View> cardViews = new HashMap<>();
 
-    private HashMap<Integer, Integer> idMap = new HashMap<>();
+    private HashMap<Article, Integer> idMap = new HashMap<>();
     public ArrayList<Article> articles;
 
     private final ConstraintLayout fullArticle;
@@ -64,15 +64,15 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         this.compressCardViewClass = compressCardViewClass;
 
         for (int i = 0; i < articles.size(); i++) {
-            idMap.put(articles.get(i).getId(), i);
+            idMap.put(articles.get(i), i);
         }
     }
 
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup container) {
-        if (convertView == null || getItemId(position) == -1) {
-            Article article = articles.get(position);
+        Article article = articles.get(position);
 
+        if (convertView == null || getItemId(position) == -1 || !((TextView) convertView.findViewById(R.id.text_title)).getText().equals(article.getTitle())) {
             try {
                 convertView = compressCardViewClass.getConstructor(Context.class, ViewGroup.class, Article.class, ArticleAdapter.class).newInstance(getContext(), container, article, this).getView();
 
@@ -97,9 +97,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     public long getItemId(int position) {
         Article article = getItem(position);
 
-        if (article == null) return -1;
-
-        return idMap.get(article.getId());
+        return idMap.get(article);
     }
 
     @Override
@@ -111,7 +109,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     public void add(Article article) {
         super.add(article);
 
-        idMap.put(article.getId(), articles.size());
+        idMap.put(article, articles.size());
 
         this.notifyDataSetChanged();
     }

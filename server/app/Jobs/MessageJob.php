@@ -45,5 +45,7 @@ class MessageJob extends Job
         $topic->topic('notifications');
 
         $downstreamResponse = FCM::sendToTopic($topic, null, $notification, $data);
+
+        var_dump($downstreamResponse);
     }
 }

@@ -84,6 +84,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             }
         }
 
+        if (articles.size() == 1) {
+            container.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+        } else {
+            container.getLayoutParams().height = 0;
+        }
+
         return convertView;
     }
 

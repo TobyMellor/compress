@@ -4,7 +4,7 @@ import android.view.View;
 
 import uk.co.tobymellor.compress.views.card.ArticleAdapter;
 
-abstract class ComPressFragment {
+public abstract class ComPressFragment {
     View fragment;
     ArticleAdapter adapter;
 

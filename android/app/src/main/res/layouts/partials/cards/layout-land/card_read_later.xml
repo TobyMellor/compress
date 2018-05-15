@@ -36,8 +36,7 @@
                     android:layout_height="100dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/post_example" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/text_title"

@@ -8,6 +8,7 @@ import android.widget.ListView;
 import java.util.HashSet;
 
 import uk.co.tobymellor.compress.MainActivity;
+import uk.co.tobymellor.compress.NetworkChangeReceiver;
 import uk.co.tobymellor.compress.R;
 import uk.co.tobymellor.compress.models.articles.Article;
 import uk.co.tobymellor.compress.views.card.ArticleAdapter;

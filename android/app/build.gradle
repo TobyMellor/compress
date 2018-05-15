@@ -23,6 +23,7 @@ android {
                             'src/main/res/layouts/partials/cards',
                             'src/main/res/layouts/partials/cards/partials',
                             'src/main/res/layouts/partials/navigation',
+                            'src/main/res/layouts/partials/errors',
                             'src/main/res/layouts',
                             'src/main/res',
                     ]

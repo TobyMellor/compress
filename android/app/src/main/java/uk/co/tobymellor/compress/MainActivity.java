@@ -1,6 +1,8 @@
 package uk.co.tobymellor.compress;
 
 import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -29,6 +31,7 @@ import uk.co.tobymellor.compress.models.news_outlets.NewsOutletManager;
 import uk.co.tobymellor.compress.models.read_later.ReadLaterManager;
 import uk.co.tobymellor.compress.notifications.FirebaseInstanceIDService;
 import uk.co.tobymellor.compress.notifications.FirebaseMessagingService;
+import uk.co.tobymellor.compress.views.ComPressFragment;
 import uk.co.tobymellor.compress.views.DiscoverFragment;
 import uk.co.tobymellor.compress.views.ReadLaterFragment;
 import uk.co.tobymellor.compress.views.SettingsFragment;
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static ReadLaterFragment readLaterFragment = null;
     private static DiscoverFragment discoverFragment   = null;
+
+    private NetworkChangeReceiver networkChangeReceiver = new NetworkChangeReceiver();
 
     public final static String BASE_URL = "http://46.101.28.103/";
 
@@ -69,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic(FirebaseMessagingService.SUBSCRIBED_TOPIC);
         FirebaseInstanceId.getInstance().getToken();
 
+        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
         if (articleManager == null) {
             try {
                 newsOutletManager      = new NewsOutletManager();
@@ -89,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
+
+        initTabLayoutListener(tabLayout);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -106,6 +115,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    protected void initTabLayoutListener(TabLayout tabLayout) {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0 || tab.getPosition() == 1) {
+                    networkChangeReceiver.shouldDisplaySplashScreen();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //
+            }
+        });
     }
 
     public static NewsOutletManager getNewsOutletManager() {
@@ -134,6 +164,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static DiscoverFragment getDiscoverFragment() {
         return discoverFragment;
+    }
+
+    public ViewPager getViewPager() {
+        return mViewPager;
     }
 
     /**
@@ -165,17 +199,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            switch(getArguments().getInt(ARG_SECTION_NUMBER)) {
+            ComPressFragment compressFragment = null;
+
+            switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
                 case 1:
-                    readLaterFragment = new ReadLaterFragment(inflater, container);
+                    if (readLaterFragment == null)
+                        readLaterFragment = new ReadLaterFragment(inflater, container);
 
-                    return readLaterFragment.getView();
+                    compressFragment = readLaterFragment;
+                    break;
                 case 2:
-                    discoverFragment = new DiscoverFragment(inflater, container);
+                    if (discoverFragment == null)
+                        discoverFragment = new DiscoverFragment(inflater, container);
 
-                    return discoverFragment.getView();
+                    compressFragment = discoverFragment;
+                    break;
                 case 3:
-                    return new SettingsFragment(inflater, container, (MainActivity) inflater.getContext()).getView();
+                    compressFragment = new SettingsFragment(inflater, container, (MainActivity) inflater.getContext());
+            }
+
+            if (compressFragment != null) {
+                return compressFragment.getView();
             }
 
             return null;

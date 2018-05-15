@@ -9,4 +9,5 @@
     <color name="colorCloudyWhite">#BEE8F0</color>
     <color name="colorBackground">#FAFAFA</color>
     <color name="colorTransparent">#00FFFFFF</color>
+    <color name="colorRed">#e74c3c</color>
 </resources>

@@ -1,5 +1,7 @@
 package uk.co.tobymellor.compress.models;
 
+import android.app.Application;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +12,7 @@ import java.util.Map;
 
 import uk.co.tobymellor.compress.MainActivity;
 
-abstract public class Manager {
+abstract public class Manager extends Application {
     public final static String BASE_URL = MainActivity.BASE_URL + "api";
 
     public abstract void add(Object object);

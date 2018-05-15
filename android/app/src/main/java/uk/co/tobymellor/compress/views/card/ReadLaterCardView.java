@@ -35,7 +35,7 @@ public class ReadLaterCardView extends ComPressCardView {
         multiOnClickListener.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.getReadLaterManager().remove(article);
+                MainActivity.getReadLaterManager().remove(view.getContext(), article);
             }
         });
 

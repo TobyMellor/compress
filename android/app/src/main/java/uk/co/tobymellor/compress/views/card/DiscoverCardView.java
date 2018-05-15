@@ -24,7 +24,7 @@ public class DiscoverCardView extends ComPressCardView {
         multiOnClickListener.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.getReadLaterManager().add(article);
+                MainActivity.getReadLaterManager().add(view.getContext(), article);
             }
         });
 

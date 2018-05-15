@@ -1,15 +1,22 @@
 package uk.co.tobymellor.compress.models.read_later;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import org.json.JSONException;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
@@ -19,16 +26,10 @@ import uk.co.tobymellor.compress.models.articles.Article;
 import uk.co.tobymellor.compress.models.articles.JSONArticleInput;
 
 public class ReadLaterManager extends Manager {
-    public final static String PREFERENCES_FILE = "read_later";
-    private final static String PREFERENCE_ARTICLE_IDS = "article_ids";
     private final static String ENDPOINT = "read_later_articles";
 
-    private final SharedPreferences sharedPreferences;
-
-    public ReadLaterManager(SharedPreferences sharedPreferences) throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
-        this.sharedPreferences = sharedPreferences;
-
-        String uncachedArticleIds = getStringFromList(getUncachedArticleIds());
+    public ReadLaterManager(final Context context) throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
+       String uncachedArticleIds = getStringFromList(getUncachedArticleIds(context));
 
         if (uncachedArticleIds.length() > 0) {
             HashMap<String, String> params = new HashMap<>();
@@ -41,12 +42,30 @@ public class ReadLaterManager extends Manager {
         }
     }
 
-    private String getReadLaterIdString() {
-        return sharedPreferences.getString(ReadLaterManager.PREFERENCE_ARTICLE_IDS, "");
+    private ArrayList<Integer> getReadLaterArticleIds(final Context context) {
+        ArrayList<Integer> articleIds = new ArrayList<>();
+
+        Cursor cursor = context.getContentResolver().query(
+                ReadLaterContract.ReadLaterTable.CONTENT_URI,
+                null,
+                null,
+                null,
+                ReadLaterContract.ReadLaterTable._ID + " COLLATE LOCALIZED DESC"
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int articleIdIndex = cursor.getColumnIndex(ReadLaterContract.ReadLaterTable.COLUMN_ARTICLE_ID);
+
+                articleIds.add(cursor.getInt(articleIdIndex));
+            } while (cursor.moveToNext());
+        }
+
+        return articleIds;
     }
 
-    private ArrayList<Integer> getUncachedArticleIds() {
-        ArrayList<Integer> uncachedIds      = getListFromString(getReadLaterIdString());
+    private ArrayList<Integer> getUncachedArticleIds(final Context context) {
+        ArrayList<Integer> uncachedIds      = getReadLaterArticleIds(context);
         ArrayList<Article> cachedArticles   = MainActivity.getArticleManager().getCachedArticles();
         ArrayList<Integer> cachedArticleIds = new ArrayList<>();
 
@@ -57,11 +76,11 @@ public class ReadLaterManager extends Manager {
         return uncachedIds;
     }
 
-    public ArrayList<Article> getReadLaterArticles() {
+    public ArrayList<Article> getReadLaterArticles(final Context context) {
         ArrayList<Article> readLaterArticles = new ArrayList<>();
         ArrayList<Article> articles          = MainActivity.getArticleManager().getCachedArticles();
 
-        for (int readLaterArticleId : getListFromString(getReadLaterIdString())) {
+        for (int readLaterArticleId : getReadLaterArticleIds(context)) {
             for (Article article : articles) {
                 if (article.getId() == readLaterArticleId) {
                     readLaterArticles.add(article); break;
@@ -90,51 +109,40 @@ public class ReadLaterManager extends Manager {
 
     @Override
     public void add(Object object) {
-        if (object instanceof Article) {
-            Article article = (Article) object;
-            int articleId   = article.getId();
+        //
+    }
 
-            if (MainActivity.getReadLaterFragment() != null) {
-                MainActivity.getReadLaterFragment().getArticleAdapter().add(article);
-            }
+    public void add(final Context context, final Article article) {
+        int articleId   = article.getId();
 
-            if (MainActivity.getArticleManager().get(articleId) == null) {
-                MainActivity.getArticleManager().add(article);
-            }
-
-            if (!getListFromString(getReadLaterIdString()).contains(articleId)) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                ArrayList<Integer> readLaterIdList = getListFromString(getReadLaterIdString());
-                readLaterIdList.add(articleId);
-
-                editor.putString(PREFERENCE_ARTICLE_IDS, getStringFromList(readLaterIdList));
-                editor.apply();
-            }
+        if (MainActivity.getReadLaterFragment() != null) {
+            MainActivity.getReadLaterFragment().getArticleAdapter().add(article);
         }
+
+        if (MainActivity.getArticleManager().get(articleId) == null) {
+            MainActivity.getArticleManager().add(article);
+        }
+
+        ContentValues values = new ContentValues();
+
+        values.put(ReadLaterContract.ReadLaterTable.COLUMN_ARTICLE_ID, articleId);
+
+        context.getContentResolver().insert(ReadLaterContract.ReadLaterTable.CONTENT_URI, values);
     }
 
     @Override
     public void remove(Object object) {
-        if (object instanceof Article) {
-            Article article = (Article) object;
-            int articleId   = article.getId();
+        //
+    }
 
-            if (MainActivity.getReadLaterFragment() != null) {
-                MainActivity.getDiscoverFragment().getArticleAdapter().add(article);
-            }
+    public void remove(final Context context, final Article article) {
+        int articleId = article.getId();
 
-            if (getListFromString(getReadLaterIdString()).contains(articleId)) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                ArrayList<Integer> readLaterIdList = getListFromString(getReadLaterIdString());
-                readLaterIdList.remove(Integer.valueOf(articleId)); // wrapped in Integer.valueOf() to remove the Integer, not remove by index
-
-
-                editor.putString(PREFERENCE_ARTICLE_IDS, getStringFromList(readLaterIdList));
-                editor.apply();
-            }
+        if (MainActivity.getReadLaterFragment() != null) {
+            MainActivity.getDiscoverFragment().getArticleAdapter().add(article);
         }
+
+        context.getContentResolver().delete(ReadLaterContract.ReadLaterTable.buildReadLaterUriWithId(articleId), null, null);
     }
 
     @Override

@@ -47,6 +47,10 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
             </intent-filter>
         </receiver>
+
+        <provider android:name="uk.co.tobymellor.compress.models.read_later.ReadLaterContentProvider"
+            android:authorities="uk.co.tobymellor.compress"
+            android:exported="false" />
     </application>
 
 </manifest>

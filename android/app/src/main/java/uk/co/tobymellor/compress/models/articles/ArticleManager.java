@@ -1,5 +1,6 @@
 package uk.co.tobymellor.compress.models.articles;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
@@ -29,10 +30,10 @@ public class ArticleManager extends Manager {
         super.populateFromJSON(this, Article.class, JSONArticleInput.class, task.get());
     }
 
-    public ArrayList<Article> getArticles() {
+    public ArrayList<Article> getArticles(Context context) {
         ArrayList<Article> articles = new ArrayList<>(getCachedArticles());
 
-        articles.removeAll(MainActivity.getReadLaterManager().getReadLaterArticles());
+        articles.removeAll(MainActivity.getReadLaterManager().getReadLaterArticles(context));
 
         return articles;
     }

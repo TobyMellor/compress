@@ -18,7 +18,7 @@ public class DiscoverFragment extends ComPressFragment {
     public DiscoverFragment(LayoutInflater inflater, ViewGroup container) {
         fragment = inflater.inflate(R.layout.fragment_articles, container, false);
 
-        adapter = new ArticleAdapter(fragment.getContext(), MainActivity.getArticleManager().getArticles(), DiscoverCardView.class);
+        adapter = new ArticleAdapter(fragment.getContext(), MainActivity.getArticleManager().getArticles(fragment.getContext()), DiscoverCardView.class);
     }
 
     public View getView() {

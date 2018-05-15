@@ -1,5 +1,6 @@
 package uk.co.tobymellor.compress;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -22,12 +23,14 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.models.articles.ArticleManager;
 import uk.co.tobymellor.compress.models.genres.GenreManager;
 import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenreManager;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutletManager;
+import uk.co.tobymellor.compress.models.read_later.ReadLaterContract;
 import uk.co.tobymellor.compress.models.read_later.ReadLaterManager;
 import uk.co.tobymellor.compress.notifications.FirebaseInstanceIDService;
 import uk.co.tobymellor.compress.notifications.FirebaseMessagingService;
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 genreManager           = new GenreManager();
                 newsOutletGenreManager = new NewsOutletGenreManager();
                 articleManager         = new ArticleManager();
-                readLaterManager       = new ReadLaterManager(getSharedPreferences(ReadLaterManager.PREFERENCES_FILE, Context.MODE_PRIVATE));
+                readLaterManager       = new ReadLaterManager(this);
             } catch (InterruptedException | ExecutionException | JSONException | ReflectiveOperationException e) {
                 e.printStackTrace();
             }

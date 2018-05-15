@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
-use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
+use LaravelFCM\Message\Topics;
 use FCM;
 
 use App\FirebaseToken;
@@ -29,9 +29,6 @@ class MessageJob extends Job
      */
     public function handle()
     {
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-
         $randomArticle = Article::inRandomOrder()->first();
 
         $notificationBuilder = new PayloadNotificationBuilder('BREAKING NEWS: ' . $randomArticle->title);
@@ -41,14 +38,13 @@ class MessageJob extends Job
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData(['article_link' => $randomArticle->article_link]);
 
-        $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
 
-        // You must change it to get your tokens
-        $tokens = FirebaseToken::pluck('token')->toArray();
+        $topic = new Topics();
+        $topic->topic('notifications');
 
-        $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
+        $downstreamResponse = FCM::sendToTopic($topic, null, $notification, $data);
 
         //return Array - you must remove all this tokens in your database
         var_dump($downstreamResponse->tokensToDelete());

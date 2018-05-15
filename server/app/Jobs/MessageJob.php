@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Message\PayloadNotificationBuilder;
-use LaravelFCM\Message\Topics;
 use FCM;
 
 use App\FirebaseToken;
@@ -29,23 +29,38 @@ class MessageJob extends Job
      */
     public function handle()
     {
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60*20);
+
         $randomArticle = Article::inRandomOrder()->first();
 
         $notificationBuilder = new PayloadNotificationBuilder('BREAKING NEWS: ' . $randomArticle->title);
         $notificationBuilder->setBody($randomArticle->author_summary)
-                            ->setSound('default');
+                            ->setSound('default')
+                            ->setChannelId('compress_notifications');
 
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData(['article_link' => $randomArticle->article_link]);
 
+        $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
 
-        $topic = new Topics();
-        $topic->topic('notifications');
+        // You must change it to get your tokens
+        $tokens = FirebaseToken::pluck('token')->toArray();
 
-        $downstreamResponse = FCM::sendToTopic($topic, null, $notification, $data);
+        $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
 
-        var_dump($downstreamResponse);
+        //return Array - you must remove all this tokens in your database
+        var_dump($downstreamResponse->tokensToDelete());
+
+        //return Array (key : oldToken, value : new token - you must change the token in your database )
+        var_dump($downstreamResponse->tokensToModify());
+
+        //return Array - you should try to resend the message to the tokens in the array
+        var_dump($downstreamResponse->tokensToRetry());
+
+        // return Array (key:token, value:errror) - in production you should remove from your database the tokens present in this array
+        var_dump($downstreamResponse->tokensWithError());
     }
 }

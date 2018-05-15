@@ -268,7 +268,7 @@ class ArticleController extends Controller {
 
                     $this->sessionCaches[] = $checkCache->id;
                 } catch (\GuzzleHttp\Exception\ClientException $e) {
-                    die($e->getResponse()->getBody()->getContents());
+                    //
                 }
             }
 

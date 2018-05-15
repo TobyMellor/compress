@@ -59,44 +59,40 @@ class ArticleCrawler {
         $client         = new Client();
         $newsOutletSlug = $this->newsOutletSlug;
 
-        try {
-            $response = $client->request('GET', $this->articleLink, [
-                'headers' => [
-                    'User-Agent' => self::USER_AGENT
-                ]
-            ])->getBody()->getContents();
+        $response = $client->request('GET', $this->articleLink, [
+            'headers' => [
+                'User-Agent' => self::USER_AGENT
+            ]
+        ])->getBody()->getContents();
 
-            $crawlMethod = 'crawl' . $this->getCamelCaseFromSlug($newsOutletSlug);
+        $crawlMethod = 'crawl' . $this->getCamelCaseFromSlug($newsOutletSlug);
+        
+        if (method_exists($this, $crawlMethod)) {
+            $doc = new Document();
+            $doc->html($response);
             
-            if (method_exists($this, $crawlMethod)) {
-                $doc = new Document();
-                $doc->html($response);
-                
-                $genre     = call_user_func([$this, $crawlMethod], $doc);
-                $genreSlug = strtolower(str_replace(' ', '-', $genre));
-                
-                $newsOutletGenres = NewsOutletGenre::whereHas('news_outlet', function($query) use ($newsOutletSlug) {
-                        $query->where('news_outlet.slug', $newsOutletSlug);
-                    })
-                    ->whereHas('genre', function($query) use ($genreSlug) {
-                        $query->where('genre.slug', $genreSlug);
-                    })
-                    ->first();
+            $genre     = call_user_func([$this, $crawlMethod], $doc);
+            $genreSlug = strtolower(str_replace(' ', '-', $genre));
+            
+            $newsOutletGenres = NewsOutletGenre::whereHas('news_outlet', function($query) use ($newsOutletSlug) {
+                    $query->where('news_outlet.slug', $newsOutletSlug);
+                })
+                ->whereHas('genre', function($query) use ($genreSlug) {
+                    $query->where('genre.slug', $genreSlug);
+                })
+                ->first();
 
-                if ($newsOutletGenres) {
-                    $this->newsOutletGenreId = $newsOutletGenres->id;
+            if ($newsOutletGenres) {
+                $this->newsOutletGenreId = $newsOutletGenres->id;
 
-                    if ($shouldCrawlAuthor) {
-                        $crawlMethodAuthorPicture = $crawlMethod . 'AuthorPicture';
-                        
-                        if (method_exists($this, $crawlMethodAuthorPicture)) {
-                            $this->authorImageLink = call_user_func([$this, $crawlMethodAuthorPicture], $doc);
-                        }
+                if ($shouldCrawlAuthor) {
+                    $crawlMethodAuthorPicture = $crawlMethod . 'AuthorPicture';
+                    
+                    if (method_exists($this, $crawlMethodAuthorPicture)) {
+                        $this->authorImageLink = call_user_func([$this, $crawlMethodAuthorPicture], $doc);
                     }
                 }
             }
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            var_dump($e->getResponse()->getBody()->getContents());
         }
     }
 

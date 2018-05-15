@@ -73,9 +73,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseApp.initializeApp(this);
-        FirebaseMessaging.getInstance().subscribeToTopic(FirebaseMessagingService.SUBSCRIBED_TOPIC);
-        FirebaseInstanceId.getInstance().getToken();
+        FirebaseMessagingService.init(this);
 
         registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 

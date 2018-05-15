@@ -16,7 +16,6 @@
     <string name="clear_read_later">Clear read later</string>
     <string name="clear_cached_articles">Clear cached articles</string>
     <string name="view_user_guide">View user guide</string>
-    <string name="enable_notifications">Enable notifications</string>
 
     <!--Articles-->
     <string name="read_short_sentence_summary">Read More</string>
@@ -27,6 +26,10 @@
     <string name="channel_id">compress_notifications</string>
     <string name="channel_name">ComPress Notifications</string>
     <string name="channel_description">Enable your notifications to receive live news updates from News Outlets and Genres that interest you!</string>
+    <string name="notifications_enabled">Notifications enabled.</string>
+    <string name="notifications_disabled">Notifications disabled.</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="disable_notifications">Disable Notifications</string>
 
     <!--Sharing-->
     <string name="share_subject">You need to check out this article</string>

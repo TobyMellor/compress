@@ -106,12 +106,17 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     }
 
     @Override
-    public void add(Article article) {
-        super.add(article);
+    public void add(final Article article) {
+        ((Activity) getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ArticleAdapter.super.add(article);
 
-        idMap.put(article, articles.size());
+                idMap.put(article, articles.size());
 
-        this.notifyDataSetChanged();
+                ArticleAdapter.this.notifyDataSetChanged();
+            }
+        });
     }
 
     public void remove(ComPressCardView articleViewToRemove) {

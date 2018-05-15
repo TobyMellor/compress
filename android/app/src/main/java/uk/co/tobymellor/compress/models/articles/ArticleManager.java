@@ -1,16 +1,16 @@
 package uk.co.tobymellor.compress.models.articles;
 
+import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
-import uk.co.tobymellor.compress.JSONTask;
 import uk.co.tobymellor.compress.MainActivity;
 import uk.co.tobymellor.compress.models.Manager;
 
@@ -19,16 +19,32 @@ public class ArticleManager extends Manager {
 
     private ArrayList<Article> articles = new ArrayList<>();
 
-    public ArticleManager() throws InterruptedException, ExecutionException, JSONException, ReflectiveOperationException {
-        HashMap<String, String> params = new HashMap<>();
-
-        params.put("date", "2018-04-02 00:00:00");     // TODO: Replace with cached date
-        params.put("news_outlet_genre_ids", "1,2,12"); // TODO: Replace with current news_outlet_genre_ids
-
-        AsyncTask<String, String, String> task = new JSONTask().execute(super.formUrl(ArticleManager.ENDPOINT, params));
-
-        super.populateFromJSON(this, Article.class, JSONArticleInput.class, task.get());
+    public ArticleManager(MainActivity mainActivity) {
+        pullNewArticles(mainActivity);
     }
+
+    public void pullNewArticles(final MainActivity mainActivity) {
+        LoaderManager.LoaderCallbacks<ArrayList<Article>> loaderCallbacks = new LoaderManager.LoaderCallbacks<ArrayList<Article>>() {
+            @NonNull
+            @Override
+            public Loader<ArrayList<Article>> onCreateLoader(int id, @Nullable Bundle args) {
+                return new ArticleLoader(mainActivity);
+            }
+
+            @Override
+            public void onLoadFinished(@NonNull Loader<ArrayList<Article>> loader, ArrayList<Article> data) {
+
+            }
+
+            @Override
+            public void onLoaderReset(@NonNull Loader<ArrayList<Article>> loader) {
+
+            }
+        };
+
+        mainActivity.getSupportLoaderManager().restartLoader(0, null, loaderCallbacks);
+    }
+
 
     public ArrayList<Article> getArticles(Context context) {
         ArrayList<Article> articles = new ArrayList<>(getCachedArticles());
@@ -50,9 +66,16 @@ public class ArticleManager extends Manager {
         return null;
     }
 
-    public void add(Object article) {
-        if (article instanceof Article) {
-            articles.add((Article) article);
+    public void add(Object object) {
+        if (object instanceof Article) {
+            Article article = (Article) object;
+
+            articles.add(article);
+
+            if (MainActivity.getDiscoverFragment() != null && MainActivity.getDiscoverFragment().getArticleAdapter() != null) {
+                MainActivity.getDiscoverFragment().getArticleAdapter().add(article);
+            }
+
         }
     }
 

@@ -1,6 +1,9 @@
-package uk.co.tobymellor.compress.models;
+package uk.co.tobymellor.compress;
 
-import android.app.Application;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,16 +13,27 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.co.tobymellor.compress.MainActivity;
+import uk.co.tobymellor.compress.models.Manager;
 
-abstract public class Manager {
+public abstract class ComPressAsyncLoader<D> extends AsyncTaskLoader<D> {
     public final static String BASE_URL = MainActivity.BASE_URL + "api";
 
-    public abstract void add(Object object);
+    public ComPressAsyncLoader(Context context) {
+        super(context);
+    }
 
-    public abstract void remove(Object object);
+    @Override
+    protected void onStartLoading() {
+        forceLoad();
+    }
 
-    public abstract String getEndpoint();
+    @Override
+    public abstract D loadInBackground();
+
+    @Override
+    public void deliverResult(D data) {
+        super.deliverResult(data);
+    }
 
     protected String formUrl(String endpoint, HashMap<String, String> params) {
         StringBuilder paramString = new StringBuilder();
@@ -36,7 +50,7 @@ abstract public class Manager {
 
         String finalParamString = paramString.toString().replace(" ", "+");
 
-        return String.format("%s/%s%s", Manager.BASE_URL, endpoint, finalParamString);
+        return String.format("%s/%s%s", ComPressAsyncLoader.BASE_URL, endpoint, finalParamString);
     }
 
     protected void populateFromJSON(

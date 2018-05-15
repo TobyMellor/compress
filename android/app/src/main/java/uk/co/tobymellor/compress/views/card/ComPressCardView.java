@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,7 @@ import uk.co.tobymellor.compress.models.articles.Article;
 import uk.co.tobymellor.compress.models.authors.Author;
 import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
-public abstract class ComPressCardView {
+public abstract class ComPressCardView extends CardView {
     protected final View articleCardView;
     protected final Article article;
     protected final ArticleAdapter adapterContainer;
@@ -37,7 +38,9 @@ public abstract class ComPressCardView {
     private TextView authorName;
 
     ComPressCardView(final Context context, ViewGroup container, @NonNull Article article, ArticleAdapter adapterContainer, int layout) {
-        articleCardView       = LayoutInflater.from(context).inflate(layout, container, false);
+        super(context);
+
+        articleCardView = LayoutInflater.from(context).inflate(layout, container, false);
 
         this.article          = article;
         this.adapterContainer = adapterContainer;

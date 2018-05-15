@@ -42,6 +42,11 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".ArticleRefreshService"
+            android:enabled="true">
+        </service>
+
         <receiver android:name=".NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>

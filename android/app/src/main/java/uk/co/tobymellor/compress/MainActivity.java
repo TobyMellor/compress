@@ -1,9 +1,13 @@
 package uk.co.tobymellor.compress;
 
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
+import android.os.IBinder;
 import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 newsOutletManager      = new NewsOutletManager();
                 genreManager           = new GenreManager();
                 newsOutletGenreManager = new NewsOutletGenreManager();
-                articleManager         = new ArticleManager();
+                articleManager         = new ArticleManager(this);
                 readLaterManager       = new ReadLaterManager(this);
             } catch (InterruptedException | ExecutionException | JSONException | ReflectiveOperationException e) {
                 e.printStackTrace();
@@ -104,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
         mViewPager.setCurrentItem(savedInstanceState != null ? savedInstanceState.getInt("current_item") : 1);
+
+        ArticleRefreshService.mainActivity = this; // needs a better way of retrieving MainActivity's context
+        startService(new Intent(this, ArticleRefreshService.class));
     }
 
     @Override

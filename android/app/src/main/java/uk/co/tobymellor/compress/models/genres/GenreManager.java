@@ -10,7 +10,6 @@ import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
 import uk.co.tobymellor.compress.models.Manager;
-import uk.co.tobymellor.compress.models.news_outlets.NewsOutlet;
 
 public class GenreManager extends Manager {
     private final static String ENDPOINT = "genres";

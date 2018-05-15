@@ -2,7 +2,6 @@ package uk.co.tobymellor.compress.models.news_outlets;
 
 import android.os.AsyncTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.HashMap;
@@ -11,7 +10,6 @@ import java.util.concurrent.ExecutionException;
 
 import uk.co.tobymellor.compress.JSONTask;
 import uk.co.tobymellor.compress.models.Manager;
-import uk.co.tobymellor.compress.models.news_outlet_genres.NewsOutletGenre;
 
 public class NewsOutletManager extends Manager {
     private final static String ENDPOINT = "news_outlets";

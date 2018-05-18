@@ -30,6 +30,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        if (!isNotificationsEnabled(getApplicationContext())) return;
+
         createNotificationChannel();
 
         Intent externalArticle = new Intent(Intent.ACTION_VIEW);

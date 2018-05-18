@@ -49,8 +49,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     private final FloatingActionButton floatingCloseButton;
     private final Class<? extends ComPressCardView> compressCardViewClass;
 
-    private Article currentArticle;
-
     public ArticleAdapter(Context context, ArrayList<Article> articles, Class<? extends ComPressCardView> compressCardViewClass) {
         super(context, 0, articles);
 
@@ -58,7 +56,6 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         floatingCloseButton = fullArticle.findViewById(R.id.floating_close_button);
 
         initHideArticleListener(context);
-        initFullArticleListeners(context);
 
         this.articles = articles;
         this.compressCardViewClass = compressCardViewClass;
@@ -275,7 +272,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         return (float) Math.hypot(width, height);
     }
 
-    private void initFullArticleListeners(final Context context) {
+    private void initFullArticleListeners(final Context context, final Article currentArticle) {
         fullArticle.findViewById(R.id.text_read_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,16 +293,17 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
 
                 intent.setType("text/plane");
                 intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_subject));
-                intent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_body_end));
+                intent.putExtra(Intent.EXTRA_TEXT, currentArticle.getArticleLink() + " " + context.getString(R.string.share_body_end));
 
                 context.startActivity(Intent.createChooser(intent, "Share using"));
             }
         });
 
-        initExternalArticleListener(context, fullArticle.findViewById(R.id.text_title));
+        initExternalArticleListener(context, fullArticle.findViewById(R.id.text_title), currentArticle);
+        initExternalArticleListener(context, fullArticle.findViewById(R.id.text_read_full_article), currentArticle);
     }
 
-    private void initExternalArticleListener(final Context context, final View view) {
+    private void initExternalArticleListener(final Context context, final View view, final Article currentArticle) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -319,7 +317,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     }
 
     private void populateFullArticle(ConstraintLayout fullArticle, Article article) {
-        this.currentArticle = article;
+        initFullArticleListeners(fullArticle.getContext(), article);
 
         ImageView articleImage = fullArticle.findViewById(R.id.image_article);
         ImageView authorImage = fullArticle.findViewById(R.id.image_author);
@@ -356,7 +354,5 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
             textReadMore.setVisibility(View.INVISIBLE);
             textReadFullArticle.setVisibility(View.VISIBLE);
         }
-
-        initExternalArticleListener(fullArticle.getContext(), fullArticle.findViewById(R.id.text_read_full_article));
     }
 }

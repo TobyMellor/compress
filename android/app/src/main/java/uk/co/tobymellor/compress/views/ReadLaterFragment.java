@@ -25,7 +25,7 @@ public class ReadLaterFragment extends ComPressFragment {
     public ReadLaterFragment(LayoutInflater inflater, ViewGroup container) {
         fragment = inflater.inflate(R.layout.fragment_articles, container, false);
 
-        adapter  = new ArticleAdapter(fragment.getContext(), MainActivity.getReadLaterManager().getReadLaterArticles(fragment.getContext()), ReadLaterCardView.class);
+        adapter = new ArticleAdapter(fragment.getContext(), MainActivity.getReadLaterManager().getReadLaterArticles(fragment.getContext()), ReadLaterCardView.class);
     }
 
     public View getView() {

@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        ComPress {
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "uk.co.tobymellor.compress"

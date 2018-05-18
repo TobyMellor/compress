@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
 import uk.co.tobymellor.compress.models.Manager;
 
 public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
-    private final static String ENDPOINT = "/send-firebase-token";
+    private final static String ENDPOINT = "/store-firebase-token";
     private final static String TOKEN_PARAM = "token";
 
     @Override
